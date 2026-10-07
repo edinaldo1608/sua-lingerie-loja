@@ -56,11 +56,6 @@ a{color:inherit;text-decoration:none}
 .catnav button{white-space:nowrap;padding:9px 16px;border:0;background:transparent;color:var(--mut);font:inherit;font-weight:600;font-size:14px;border-radius:99px;cursor:pointer;transition:.15s}
 .catnav button:hover{background:var(--cor-suave);color:var(--cor)}
 .catnav button.on{background:var(--cor);color:#fff}
-.hero{background:linear-gradient(135deg,var(--cor),var(--cor-esc));color:#fff;border-radius:var(--rad-lg);padding:34px 26px;margin:20px 0;position:relative;overflow:hidden}
-
-
-.hero h1{margin:0 0 8px;font:700 28px Georgia,serif;position:relative}
-.hero p{margin:0;opacity:.95;max-width:560px;position:relative}
 .sec{margin:26px 0}
 .sec-hd{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .sec-hd h2{margin:0;font:700 20px Georgia,serif;color:var(--tx)}
@@ -165,6 +160,25 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .foto-box img{width:100%;max-height:220px;object-fit:contain;display:block}
 .foto-box .ph{font-size:38px;line-height:1.4}
 .foto-box .ph small{display:block;font-size:12.5px;color:var(--mut);margin-top:4px}
+.foto-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.foto-slot{border:2px dashed var(--line);border-radius:var(--rad);background:#fff;min-height:110px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;text-align:center;color:var(--mut);transition:border-color .15s}
+.foto-slot:hover{border-color:var(--cor)}
+.foto-slot.principal{border-style:solid;border-color:var(--cor)}
+.foto-slot img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
+.foto-slot .ph{font-size:26px;line-height:1.2;padding:4px}
+.foto-slot .ph small{display:block;font-size:11px;color:var(--mut);margin-top:2px}
+.foto-slot .slot-x{position:absolute;top:4px;right:4px;z-index:2;border:0;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1}
+.foto-slot .slot-main{position:absolute;bottom:0;left:0;right:0;z-index:2;background:rgba(0,0,0,.55);color:#fff;font-size:10px;padding:2px 4px;text-align:center}
+.pdots{position:absolute;bottom:6px;left:0;right:0;display:flex;gap:4px;justify-content:center;z-index:2}
+.pdots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:0 0 2px rgba(0,0,0,.4)}
+.pdots i.on{background:var(--cor);outline:1px solid #fff}
+.pnav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;border:0;background:rgba(0,0,0,.4);color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:none;align-items:center;justify-content:center}
+.pimg:hover .pnav{display:flex}
+.pnav.prev{left:6px}
+.pnav.next{right:6px}
+.optgal{display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
+.optgal img{width:74px;height:74px;object-fit:cover;border-radius:10px;border:2px solid var(--line);cursor:pointer}
+.optgal img.on{border-color:var(--cor)}
 .mini{font-size:12.5px;color:var(--mut);line-height:1.5;margin:8px 0 0}
 .qtyin{display:flex;align-items:center;gap:16px}
 .qtyin button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--tx);font-size:19px;cursor:pointer}
@@ -207,8 +221,6 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 <div class="catnav"><div class="wrap"><div class="catnav-scroll" id="cats"></div></div></div>
 
 <div class="wrap">
-  <section class="hero"><h1>Encontre sua peça perfeita</h1><p>Escolha os produtos, adicione ao carrinho e finalize o pedido pelo WhatsApp. Rápido, fácil e sem cadastro.</p></section>
-
   <section class="sec" id="secCats">
     <div class="sec-hd"><h2>Categorias</h2></div>
     <div class="catrow" id="catrow"></div>
@@ -242,8 +254,8 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
         <h4>Atendimento</h4>
         <ul>
           <li>📲 WhatsApp: <b id="ftWa">—</b></li>
-          <li>� Instagram: <b id="ftIG" style="cursor:pointer" onclick="abrirInstagram()">@sualingerie.jp</b></li>
-          <li>�🕐 Seg a Sáb, 8h às 18h</li>
+          <li>📸 Instagram: <b id="ftIG" style="cursor:pointer" onclick="abrirInstagram()">@sualingerie.jp</b></li>
+          <li>🕐 Seg a Sáb, 8h às 18h</li>
           <li>📍 Atendemos todo o Brasil</li>
         </ul>
       </div>
@@ -331,17 +343,14 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
     <h3 id="cadTit">➕ Novo produto</h3>
     <p>Escolha a foto, preencha os dados e clique em Salvar produto.</p>
 
-    <label>Foto do produto (do seu computador)</label>
-    <div class="foto-box" id="cadFotoBox" onclick="document.getElementById('cadFoto').click()">
-      <div class="ph" id="cadFotoPh">📷<small>Clique para escolher a foto do PC</small></div>
-      <img id="cadFotoImg" alt="" style="display:none">
-    </div>
+    <label>Fotos do produto (até 3, do seu computador)</label>
+    <div class="foto-gallery" id="cadFotoGal"></div>
     <input type="file" id="cadFoto" accept="image/*" style="display:none" onchange="cadCarregarFoto(event)">
     <div style="display:flex;gap:8px;margin-top:8px">
-      <button class="btn" style="flex:1" onclick="document.getElementById('cadFoto').click()">🖼️ Escolher foto</button>
-      <button class="btn" style="flex:1" id="cadFotoRem" onclick="cadRemoverFoto()">✖ Remover foto</button>
+      <button class="btn" style="flex:1" id="cadFotoAdd" onclick="document.getElementById('cadFoto').click()">🖼️ Escolher foto</button>
+      <button class="btn" style="flex:1" id="cadFotoRem" onclick="cadRemoverFoto()">✖ Remover última</button>
     </div>
-    <p class="mini">A foto fica guardada dentro do próprio site (sem precisar de internet).</p>
+    <p class="mini">Você pode adicionar até 3 fotos. A foto principal é a primeira. Tudo fica guardado dentro do próprio site (sem precisar de internet).</p>
 
     <label>Nome do produto *</label>
     <input id="cadNome" placeholder="Ex.: Sutiã renda com bojo">
@@ -526,12 +535,15 @@ function render(){
   box.innerHTML='';
   if(!list.length){box.innerHTML='<div class="empty"><span class="big-i">🔍</span>Nenhum produto encontrado.<br><small>Toque em ⚙️ para carregar seus produtos.</small></div>';return}
   list.forEach((p,i)=>{
-    const img=p.img?'<img src="'+esc(p.img)+'" loading="lazy" alt="'+esc(p.nome)+'">':(ic[(p.cat||'').toLowerCase()]||'🌸');
+    const fotos=fotosDe(p);
+    const img=fotos.length?('<img class="pimg-main" src="'+esc(fotos[0])+'" loading="lazy" alt="'+esc(p.nome)+'" data-idx="0">'):(ic[(p.cat||'').toLowerCase()]||'🌸');
+    const dots=fotos.length>1?('<div class="pdots">'+fotos.map((_,k)=>'<i class="'+(k===0?'on':'')+'"></i>').join('')+'</div>'):'';
+    const nav=fotos.length>1?('<button class="pnav prev" title="Foto anterior">‹</button><button class="pnav next" title="Próxima foto">›</button>'):'';
     const sem=(+p.estoque||0)<=0;
     const tag=sem?'<span class="ptag sem">Esgotado</span>':(p._tag?'<span class="ptag">'+esc(p._tag)+'</span>':'');
     const ferramentas=editando?'<div class="cardtools"><button data-edit title="Editar">✏️</button><button data-up title="Mover para trás">↔️</button><button data-del title="Excluir">🗑️</button></div>':'';
     const el=document.createElement('article');el.className='pcard';
-    el.innerHTML='<div class="pimg">'+img+tag+ferramentas+'</div><div class="pbody">'+
+    el.innerHTML='<div class="pimg">'+img+nav+dots+tag+ferramentas+'</div><div class="pbody">'+
       '<div class="pname">'+esc(p.nome)+'</div>'+
       (p.desc?'<div class="pdesc">'+esc(p.desc)+'</div>':'')+
       '<div class="pinfo">'+esc((p.tams||[]).join(' · ')||'')+(p.cors&&p.cors.length?' · '+esc(p.cors.join(', ')):'')+'</div>'+
@@ -540,6 +552,15 @@ function render(){
       (sem?'':'<button class="btn wa full" style="margin-top:8px">Comprar pelo WhatsApp 💬</button>')+'</div></div>';
     el.querySelector('.pactions .pri').onclick=()=>abrirOpts(p);
     const waBtn=el.querySelector('.pactions .wa');if(waBtn)waBtn.onclick=()=>msgProduto(p);
+    if(fotos.length>1){
+      const main=el.querySelector('.pimg-main');
+      const pDots=el.querySelectorAll('.pdots i');
+      let fi=0;
+      const setFoto=(n)=>{fi=(n+fotos.length)%fotos.length;main.src=fotos[fi];main.dataset.idx=fi;pDots.forEach((d,k)=>d.classList.toggle('on',k===fi))};
+      const pv=el.querySelector('.pnav.prev'),nx=el.querySelector('.pnav.next');
+      if(pv)pv.onclick=(e)=>{e.stopPropagation();setFoto(fi-1)};
+      if(nx)nx.onclick=(e)=>{e.stopPropagation();setFoto(fi+1)};
+    }
     if(editando){
       el.querySelector('[data-edit]').onclick=()=>editarProduto(p);
       el.querySelector('[data-del]').onclick=()=>excluirProduto(p);
@@ -553,13 +574,17 @@ function render(){
 function abrirOpts(p){
   idOpts=Date.now();optAtual={p,tam:(p.tams&&p.tams[0])||'',cor:(p.cors&&p.cors[0])||'',qtd:1};
   const to=$('#optTop');
-  to.innerHTML='<h3>'+esc(p.nome)+'</h3><p>'+R(p.preco)+' · Escolha as opções:</p>'+
+  const fotos=fotosDe(p);
+  const gal=fotos.length?('<div class="optgal">'+fotos.map((s,k)=>'<img src="'+esc(s)+'" class="'+(k===0?'on':'')+'" alt="" data-gidx="'+k+'">').join('')+'</div>'):'';
+  to.innerHTML=(gal?'<div style="position:relative">'+gal+'</div>':'')+'<h3>'+esc(p.nome)+'</h3><p>'+R(p.preco)+' · Escolha as opções:</p>'+
     ((p.tams&&p.tams.length)?'<label>Tamanho</label><div class="chips">'+p.tams.map(t=>'<button class="chip'+(t===optAtual.tam?' on':'')+'" data-tam="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div>':'')+
     ((p.cors&&p.cors.length)?'<label>Cor</label><div class="chips">'+p.cors.map(c=>'<button class="chip'+(c===optAtual.cor?' on':'')+'" data-cor="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>':'')+
     '<label>Quantidade</label><div class="qtyin"><button id="oM">−</button><b id="oQ">1</b><button id="oP">+</button></div>'+
     '<div style="display:flex;gap:10px;margin-top:20px"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">Adicionar 🛍️</button></div>';
   to.querySelectorAll('[data-tam]').forEach(b=>b.onclick=()=>{optAtual.tam=b.dataset.tam;to.querySelectorAll('[data-tam]').forEach(x=>x.classList.toggle('on',x===b))});
   to.querySelectorAll('[data-cor]').forEach(b=>b.onclick=()=>{optAtual.cor=b.dataset.cor;to.querySelectorAll('[data-cor]').forEach(x=>x.classList.toggle('on',x===b))});
+  to.querySelectorAll('[data-gidx]').forEach(im=>{im.onclick=()=>{optAtual.foto=+im.dataset.gidx;to.querySelectorAll('[data-gidx]').forEach(x=>x.classList.toggle('on',x===im))}});
+  optAtual.foto=0;
   to.querySelector('#oM').onclick=()=>{optAtual.qtd=Math.max(1,optAtual.qtd-1);to.querySelector('#oQ').textContent=optAtual.qtd};
   to.querySelector('#oP').onclick=()=>{optAtual.qtd=Math.min(99,optAtual.qtd+1);to.querySelector('#oQ').textContent=optAtual.qtd};
   $('#mOpts').classList.add('on');
@@ -569,7 +594,9 @@ function confOpts(){const{p,tam,cor,qtd}=optAtual;addCart(p,tam,cor,qtd);fecharO
 function addCart(p,tam,cor,qtd){
   const key=[p.cod||p.nome,tam,cor].join('|');
   const ex=cart.find(i=>i.key===key);
-  if(ex)ex.qtd+=qtd;else cart.push({key,cod:p.cod,nome:p.nome,preco:+p.preco||0,tam,cor,qtd,img:p.img||''});
+  const fts=fotosDe(p);
+  const foto=(optAtual&&optAtual.p===p&&optAtual.foto!=null&&fts[optAtual.foto])||fts[0]||'';
+  if(ex)ex.qtd+=qtd;else cart.push({key,cod:p.cod,nome:p.nome,preco:+p.preco||0,tam,cor,qtd,img:foto});
   saveCart();renderCart();
 }
 function renderCart(){
@@ -712,6 +739,12 @@ function lerDoApp(){
   if(ok)toast(ok+' produtos carregados do app ✅');else toast('Nenhum produto válido encontrado');
 }
 function normalizar(p){
+  let imgs=p.imgs||p.fotos||p.images;
+  if(imgs&&!Array.isArray(imgs))imgs=[imgs];
+  imgs=(imgs||[]).map(s=>String(s||'').trim()).filter(Boolean).slice(0,3);
+  const principal=p.img||p.foto||p.imagem||p.url||imgs[0]||'';
+  if(principal&&!imgs.includes(principal))imgs.unshift(principal);
+  imgs=[...new Set(imgs)].slice(0,3);
   return {cod:p.cod||p.codigo||p.id||'',nome:p.nome||p.descricao||p.name||'Produto',cat:p.cat||p.categoria||p.grupo||'Outros',
     tams:Array.isArray(p.tams)?p.tams:(p.tamanho?String(p.tamanho).split(/[,\/|]/).map(s=>s.trim()).filter(Boolean):[]),
     cors:Array.isArray(p.cors)?p.cors:(p.cor?String(p.cor).split(/[,\/|]/).map(s=>s.trim()).filter(Boolean):[]),
@@ -719,7 +752,7 @@ function normalizar(p){
     estoque:+(p.estoque!=null?p.estoque:(p.qtd||p.quantidade||0))||0,
     desc:p.desc||p.descricao||p.detalhe||p.detalhes||'',
     _tag:p._tag||p.tag||p.etiqueta||'',
-    img:p.img||p.foto||p.imagem||p.url||''};
+    img:principal,imgs};
 }
 function importarLista(arr){
   const list=(arr||[]).map(normalizar).filter(p=>p.nome&&p.preco>0);
@@ -812,7 +845,7 @@ const CATS_CAD=['Sutiã','Calcinha','Conjunto','Body','Camisola','Pijama','Meia'
 const TAMS_CAD=['PP','P','M','G','GG','XG','Único','34','36','38','40','42','44','46','48'];
 const CORS_CAD=['Preto','Branco','Vinho','Nude','Rosa','Vermelho','Azul','Verde','Cinza','Lilás','Sortido'];
 const TAGS_CAD=['Novo','Promoção','Lançamento','Mais vendido','Última peça','Kit'];
-let cadEditIdx=null, cadFotoData='';
+let cadEditIdx=null, cadFotos=[];
 let cadSel={cats:[],tams:[],cors:[],tags:[]};
 
 function cadCategoriasDisponiveis(){return [...new Set([...CATS_CAD,...Object.keys(categorias())])]}
@@ -834,7 +867,7 @@ function cadAddCustom(grupo,inputId,boxId){
 }
 function abrirCad(idx){
   cadEditIdx=(idx==null?null:idx);
-  cadFotoData='';cadSel={cats:[],tams:[],cors:[],tags:[]};
+  cadFotos=[];cadSel={cats:[],tams:[],cors:[],tags:[]};
   const p=(cadEditIdx!=null)?CFG.produtos[cadEditIdx]:null;
   $('#cadTit').textContent=p?('✏️ Editar produto'):('➕ Novo produto');
   $('#cadSalvar').textContent=p?'💾 Salvar alterações':'💾 Salvar produto';
@@ -848,8 +881,9 @@ function abrirCad(idx){
     cadSel.tams=[...(p.tams||[])];
     cadSel.cors=[...(p.cors||[])];
     cadSel.tags=[...(p._tag?[p._tag]:[])];
-    if(p.img){cadFotoData=p.img;mostrarFotoCad(p.img)}else esconderFotoCad();
-  }else esconderFotoCad();
+    cadFotos=fotosDe(p);
+  }
+  renderFotosCad();
   montarTagpick('cadCats',cadCategoriasDisponiveis(),'cats');
   montarTagpick('cadTams',TAMS_CAD,'tams');
   montarTagpick('cadCors',CORS_CAD,'cors');
@@ -857,11 +891,36 @@ function abrirCad(idx){
   $('#mCad').classList.add('on');
 }
 function fecharCad(){$('#mCad').classList.remove('on')}
-function mostrarFotoCad(src){const img=$('#cadFotoImg');img.src=src;img.style.display='block';$('#cadFotoPh').style.display='none'}
-function esconderFotoCad(){const img=$('#cadFotoImg');img.style.display='none';img.removeAttribute('src');$('#cadFotoPh').style.display='block'}
+function fotosDe(p){
+  const arr=[];
+  if(Array.isArray(p.imgs))arr.push(...p.imgs.filter(Boolean));
+  else if(p.imgs&&typeof p.imgs==='string')arr.push(p.imgs);
+  if(p.img)arr.unshift(p.img);
+  return [...new Set(arr.filter(Boolean))].slice(0,3);
+}
+function renderFotosCad(){
+  const box=$('#cadFotoGal');if(!box)return;box.innerHTML='';
+  for(let i=0;i<3;i++){
+    const src=cadFotos[i];
+    const slot=document.createElement('div');
+    slot.className='foto-slot'+(src?'':'' )+(i===0&&src?' principal':'');
+    if(src){
+      slot.innerHTML='<img src="'+esc(src)+'" alt=""><button type="button" class="slot-x" title="Remover">✖</button>'+
+        (i===0?'<div class="slot-main">Principal</div>':'');
+      slot.querySelector('.slot-x').onclick=(ev)=>{ev.stopPropagation();removerFotoCad(i)};
+    }else{
+      slot.innerHTML='<div class="ph">📷<small>'+(i===0?'Foto principal':'Foto '+(i+1))+'</small></div>';
+      slot.onclick=()=>document.getElementById('cadFoto').click();
+    }
+    box.appendChild(slot);
+  }
+  const add=$('#cadFotoAdd');if(add)add.disabled=cadFotos.length>=3;
+  const rem=$('#cadFotoRem');if(rem)rem.disabled=cadFotos.length===0;
+}
 function cadCarregarFoto(ev){
   const f=ev.target.files&&ev.target.files[0];if(!f)return;
-  if(!/^image\//.test(f.type))return toast('Escolha um arquivo de imagem');
+  if(cadFotos.length>=3){ev.target.value='';return toast('Máximo de 3 fotos por produto')}
+  if(!/^image\//.test(f.type)){ev.target.value='';return toast('Escolha um arquivo de imagem')}
   const rd=new FileReader();
   rd.onload=e=>{
     const img=new Image();
@@ -870,16 +929,20 @@ function cadCarregarFoto(ev){
       if(w>max||h>max){const r=Math.min(max/w,max/h);w=Math.round(w*r);h=Math.round(h*r)}
       const c=document.createElement('canvas');c.width=w;c.height=h;
       c.getContext('2d').drawImage(img,0,0,w,h);
-      try{cadFotoData=c.toDataURL('image/jpeg',0.82)}catch(err){cadFotoData=e.target.result}
-      mostrarFotoCad(cadFotoData);toast('Foto carregada ✅');
+      try{cadFotos.push(c.toDataURL('image/jpeg',0.82))}catch(err){cadFotos.push(e.target.result)}
+      renderFotosCad();toast('Foto carregada ✅');
     };
-    img.onerror=()=>{cadFotoData=e.target.result;mostrarFotoCad(cadFotoData)};
+    img.onerror=()=>{cadFotos.push(e.target.result);renderFotosCad()};
     img.src=e.target.result;
   };
   rd.readAsDataURL(f);
   ev.target.value='';
 }
-function cadRemoverFoto(){cadFotoData='';esconderFotoCad();$('#cadFoto').value=''}
+function removerFotoCad(i){
+  if(i!=null&&i>=0)cadFotos.splice(i,1);
+  renderFotosCad();
+}
+function cadRemoverFoto(){if(!cadFotos.length)return;cadFotos.pop();renderFotosCad()}
 function salvarProduto(){
   const nome=$('#cadNome').value.trim();if(!nome)return toast('Digite o nome do produto');
   const preco=+String($('#cadPreco').value||'').replace(/\./g,'').replace(',','.')||0;
@@ -891,7 +954,8 @@ function salvarProduto(){
   const desc=$('#cadDesc').value.trim();
   const estoque=parseInt(String($('#cadEstoque').value||'0').replace(/\D/g,''),10)||0;
   const prod={cod:(cadEditIdx!=null&&CFG.produtos[cadEditIdx].cod)||('L'+String(Date.now()).slice(-6)),
-    nome,cat,tams:[...cadSel.tams],cors:[...cadSel.cors],preco,estoque,img:cadFotoData||'',desc};
+    nome,cat,tams:[...cadSel.tams],cors:[...cadSel.cors],preco,estoque,
+    img:cadFotos[0]||'',imgs:[...cadFotos],desc};
   if(tag)prod._tag=tag;
   if(cadEditIdx!=null)CFG.produtos[cadEditIdx]=prod;else CFG.produtos.push(prod);
   save();renderCats();renderCatsGerenciar();render();fecharCad();
