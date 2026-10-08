@@ -645,7 +645,7 @@ function render(){
       if(pv)pv.onclick=(e)=>{e.stopPropagation();setFoto(fi-1)};
       if(nx)nx.onclick=(e)=>{e.stopPropagation();setFoto(fi+1)};
     }
-    if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();abrirProduto(p)};
+    if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();if(fotos.length)abrirLightbox(fotos,+mainImg.dataset.idx||0);else abrirProduto(p)};
     if(!editando){
       const pbody=el.querySelector('.pbody');
       if(pbody)pbody.addEventListener('click',e=>{if(e.target.closest('.pactions'))return;abrirProduto(p)});
