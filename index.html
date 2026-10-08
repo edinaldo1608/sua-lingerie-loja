@@ -168,6 +168,11 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .foto-slot .ph{font-size:26px;line-height:1.2;padding:4px}
 .foto-slot .ph small{display:block;font-size:11px;color:var(--mut);margin-top:2px}
 .foto-slot .slot-x{position:absolute;top:4px;right:4px;z-index:2;border:0;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1}
+.slot-tools{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;display:flex;gap:3px}
+.slot-tools button{border:0;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center}
+.slot-tools button:disabled{opacity:.35;cursor:default}
+.slot-star{position:absolute;top:4px;left:4px;z-index:2;border:0;background:rgba(0,0,0,.55);color:#ffd54a;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center}
+.foto-slot.principal .slot-star{background:var(--cor);color:#ffd54a;cursor:default}
 .foto-slot .slot-main{position:absolute;bottom:0;left:0;right:0;z-index:2;background:rgba(0,0,0,.55);color:#fff;font-size:10px;padding:2px 4px;text-align:center}
 .pdots{position:absolute;bottom:6px;left:0;right:0;display:flex;gap:4px;justify-content:center;z-index:2}
 .pdots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:0 0 2px rgba(0,0,0,.4)}
@@ -350,7 +355,7 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
       <button class="btn" style="flex:1" id="cadFotoAdd" onclick="document.getElementById('cadFoto').click()">🖼️ Escolher foto</button>
       <button class="btn" style="flex:1" id="cadFotoRem" onclick="cadRemoverFoto()">✖ Remover última</button>
     </div>
-    <p class="mini">Você pode adicionar até 3 fotos. A foto principal é a primeira. Tudo fica guardado dentro do próprio site (sem precisar de internet).</p>
+    <p class="mini">Adicione até 3 fotos. Toque na ⭐ para escolher qual vira a <b>foto principal</b> (a que aparece na vitrine) e use ◀ ▶ para reordenar. Tudo fica guardado dentro do próprio site (sem precisar de internet).</p>
 
     <label>Nome do produto *</label>
     <input id="cadNome" placeholder="Ex.: Sutiã renda com bojo">
@@ -903,11 +908,24 @@ function renderFotosCad(){
   for(let i=0;i<3;i++){
     const src=cadFotos[i];
     const slot=document.createElement('div');
-    slot.className='foto-slot'+(src?'':'' )+(i===0&&src?' principal':'');
+    slot.className='foto-slot'+(i===0&&src?' principal':'');
     if(src){
-      slot.innerHTML='<img src="'+esc(src)+'" alt=""><button type="button" class="slot-x" title="Remover">✖</button>'+
-        (i===0?'<div class="slot-main">Principal</div>':'');
+      const star=(i===0)
+        ?'<span class="slot-star" title="Esta é a foto principal">⭐</span>'
+        :'<button type="button" class="slot-star" title="Usar como foto principal">⭐</button>';
+      const tools='<div class="slot-tools">'+
+        '<button type="button" data-left title="Mover para a esquerda"'+(i===0?' disabled':'')+'>◀</button>'+
+        '<button type="button" data-right title="Mover para a direita"'+(i===cadFotos.length-1?' disabled':'')+'>▶</button>'+
+        '</div>';
+      slot.innerHTML='<img src="'+esc(src)+'" alt="">'+star+tools+
+        '<button type="button" class="slot-x" title="Remover esta foto">✖</button>'+
+        (i===0?'<div class="slot-main">Principal (aparece na vitrine)</div>':'');
+      const st=slot.querySelector('button.slot-star');
+      if(st)st.onclick=(ev)=>{ev.stopPropagation();definirFotoPrincipal(i)};
       slot.querySelector('.slot-x').onclick=(ev)=>{ev.stopPropagation();removerFotoCad(i)};
+      const lf=slot.querySelector('[data-left]'),rt=slot.querySelector('[data-right]');
+      if(lf&&!lf.disabled)lf.onclick=(ev)=>{ev.stopPropagation();moverFotoCad(i,-1)};
+      if(rt&&!rt.disabled)rt.onclick=(ev)=>{ev.stopPropagation();moverFotoCad(i,1)};
     }else{
       slot.innerHTML='<div class="ph">📷<small>'+(i===0?'Foto principal':'Foto '+(i+1))+'</small></div>';
       slot.onclick=()=>document.getElementById('cadFoto').click();
@@ -916,6 +934,18 @@ function renderFotosCad(){
   }
   const add=$('#cadFotoAdd');if(add)add.disabled=cadFotos.length>=3;
   const rem=$('#cadFotoRem');if(rem)rem.disabled=cadFotos.length===0;
+}
+function definirFotoPrincipal(i){
+  if(i<=0||!cadFotos[i])return;
+  const f=cadFotos.splice(i,1)[0];
+  cadFotos.unshift(f);
+  renderFotosCad();toast('⭐ Foto principal atualizada');
+}
+function moverFotoCad(i,dir){
+  const j=i+dir;
+  if(j<0||j>=cadFotos.length)return;
+  const t=cadFotos[i];cadFotos[i]=cadFotos[j];cadFotos[j]=t;
+  renderFotosCad();
 }
 function cadCarregarFoto(ev){
   const f=ev.target.files&&ev.target.files[0];if(!f)return;
