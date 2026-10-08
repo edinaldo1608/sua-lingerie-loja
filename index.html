@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR" data-tema="preto"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sua Lingerie · Loja Online</title>
@@ -284,7 +284,7 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
       <button class="ti" title="Editar produtos" onclick="pedirPin('editar')" id="btnEdicao" style="display:none">✏️</button>
       <button class="ti" title="Configurações" onclick="pedirPin('cfg')" id="btnCfg" style="display:none">⚙️</button>
       <button class="ti ti-ig" title="Siga no Instagram" onclick="abrirInstagram()" id="btnIG">📷</button>
-      <button class="ti" title="Meu carrinho" onclick="abrirCart()">🛍️<span id="ccount" class="cart-count">0</span></button>
+      <button class="ti" title="Meu carrinho" onclick="abrirCart()">🛒<span id="ccount" class="cart-count">0</span></button>
     </div>
   </div>
 </div>
@@ -354,7 +354,7 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 
 <aside class="drawer" id="drawer">
   <div class="drawer-hd">
-    <b>🛍️ Seu carrinho</b>
+    <b>🛒 Seu carrinho</b>
     <button onclick="fecharCart()" aria-label="Fechar">✕</button>
   </div>
   <div class="drawer-body" id="cbody"></div>
@@ -631,8 +631,7 @@ function render(){
       (p.desc?'<div class="pdesc">'+esc(p.desc)+'</div>':'')+
       '<div class="pinfo">'+esc((p.tams||[]).join(' · ')||'')+(p.cors&&p.cors.length?' · '+esc(p.cors.join(', ')):'')+'</div>'+
       '<div class="pprice">'+R(p.preco)+'</div>'+
-      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛒 '+esc(p._tag):'🛒 Adicionar Carrinho'))+'</button>'+
-      (sem?'':'<button class="btn wa full" style="margin-top:8px">Comprar pelo WhatsApp 💬</button>')+'</div></div>';
+      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛒 '+esc(p._tag):'🛒 Adicionar'))+'</button>'+
       (sem?'':'<button class="btn wa full" style="margin-top:8px">Comprar pelo WhatsApp 💬</button>')+'</div></div>';
     el.querySelector('.pactions .pri').onclick=()=>abrirOpts(p);
     const waBtn=el.querySelector('.pactions .wa');if(waBtn)waBtn.onclick=()=>msgProduto(p);
@@ -646,7 +645,7 @@ function render(){
       if(pv)pv.onclick=(e)=>{e.stopPropagation();setFoto(fi-1)};
       if(nx)nx.onclick=(e)=>{e.stopPropagation();setFoto(fi+1)};
     }
-    if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();if(fotos.length)abrirLightbox(fotos,+mainImg.dataset.idx||0);else abrirProduto(p)};
+    if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();abrirProduto(p)};
     if(!editando){
       const pbody=el.querySelector('.pbody');
       if(pbody)pbody.addEventListener('click',e=>{if(e.target.closest('.pactions'))return;abrirProduto(p)});
@@ -677,7 +676,7 @@ function abrirOpts(p){
       ((p.cors&&p.cors.length)?'<label>Cor</label><div class="chips">'+p.cors.map(c=>'<button class="chip'+(c===optAtual.cor?' on':'')+'" data-cor="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>':'')+
       '<label>Quantidade</label><div class="qtyin"><button id="oM">−</button><b id="oQ">1</b><button id="oP">+</button></div>'+
     '</div>'+
-    '<div class="opt-foot"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">Adicionar 🛍️</button></div>';
+    '<div class="opt-foot"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">Adicionar 🛒</button></div>';
   to.querySelectorAll('[data-tam]').forEach(b=>b.onclick=()=>{optAtual.tam=b.dataset.tam;to.querySelectorAll('[data-tam]').forEach(x=>x.classList.toggle('on',x===b))});
   to.querySelectorAll('[data-cor]').forEach(b=>b.onclick=()=>{optAtual.cor=b.dataset.cor;to.querySelectorAll('[data-cor]').forEach(x=>x.classList.toggle('on',x===b))});
   to.querySelectorAll('[data-gidx]').forEach(im=>{im.onclick=()=>{optAtual.foto=+im.dataset.gidx;to.querySelectorAll('[data-gidx]').forEach(x=>x.classList.toggle('on',x===im));const m=to.querySelector('#optImg');if(m)m.src=fotos[optAtual.foto]}});
@@ -762,7 +761,7 @@ function abrirProduto(p){
           '<label>Quantidade</label><div class="qtyin"><button id="pdM">−</button><b id="pdQ">1</b><button id="pdP">+</button></div>'+
         '</div>'+
         '<div class="pd-actions">'+
-          '<button class="btn pri full" id="pdAdd" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':'🛍️ Adicionar ao carrinho')+'</button>'+
+          '<button class="btn pri full" id="pdAdd" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':'🛒 Adicionar ao carrinho')+'</button>'+
           (sem?'':'<button class="btn wa full" id="pdWa">Comprar pelo WhatsApp 💬</button>')+
         '</div>'+
       '</div>'+
@@ -777,7 +776,7 @@ function abrirProduto(p){
   if(nx)nx.onclick=(e)=>{e.stopPropagation();setPdFoto(prodAtual.foto+1)};
   thumbs.forEach(im=>im.onclick=()=>setPdFoto(+im.dataset.pdi));
   if(pdImg)pdImg.onclick=()=>abrirLightbox(fotos,prodAtual.foto,
-    (sem?'':'<button class="btn pri" onclick="event.stopPropagation();addCart(prodAtual.p,prodAtual.tam,prodAtual.cor,prodAtual.qtd);fecharLightbox();fecharProduto();toast(\'Adicionado ao carrinho 🛍️\')">🛒 Adicionar ao carrinho</button>')+
+    (sem?'':'<button class="btn pri" onclick="event.stopPropagation();addCart(prodAtual.p,prodAtual.tam,prodAtual.cor,prodAtual.qtd);fecharLightbox();fecharProduto();toast(\'Adicionado ao carrinho 🛒\')">🛒 Adicionar ao carrinho</button>')+
     (sem?'':'<button class="btn wa" onclick="event.stopPropagation();msgProduto(prodAtual.p)">Comprar pelo WhatsApp 💬</button>')+
     '<button class="btn" onclick="event.stopPropagation();fecharLightbox()">Voltar</button>');
 
@@ -789,7 +788,7 @@ function abrirProduto(p){
   if(qp)qp.onclick=()=>{prodAtual.qtd=Math.min(99,prodAtual.qtd+1);qq.textContent=prodAtual.qtd};
 
   const addBtn=t.querySelector('#pdAdd');
-  if(addBtn)addBtn.onclick=()=>{addCart(p,prodAtual.tam,prodAtual.cor,prodAtual.qtd);fecharProduto();toast('Adicionado ao carrinho 🛍️')};
+  if(addBtn)addBtn.onclick=()=>{addCart(p,prodAtual.tam,prodAtual.cor,prodAtual.qtd);fecharProduto();toast('Adicionado ao carrinho 🛒')};
   const waBtn=t.querySelector('#pdWa');
   if(waBtn)waBtn.onclick=()=>msgProduto(p);
 
@@ -802,7 +801,7 @@ function fecharProduto(){$('#mProd').classList.remove('on');prodAtual=null}
 })();
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#mProd')&&$('#mProd').classList.contains('on'))fecharProduto()});
 
-function confOpts(){const{p,tam,cor,qtd}=optAtual;addCart(p,tam,cor,qtd);fecharOpts();toast('Adicionado ao carrinho 🛍️')}
+function confOpts(){const{p,tam,cor,qtd}=optAtual;addCart(p,tam,cor,qtd);fecharOpts();toast('Adicionado ao carrinho 🛒')}
 function addCart(p,tam,cor,qtd){
   const key=[p.cod||p.nome,tam,cor].join('|');
   const ex=cart.find(i=>i.key===key);
@@ -815,7 +814,7 @@ function renderCart(){
   const b=$('#cbody'),n=cart.reduce((s,i)=>s+i.qtd,0),tot=cart.reduce((s,i)=>s+i.qtd*i.preco,0);
   const cc=$('#ccount');cc.textContent=n;cc.classList.toggle('on',n>0);
   $('#ctotal').textContent=R(tot);
-  if(!cart.length){b.innerHTML='<div class="empty" style="padding:60px 20px"><span class="big-i">🛍️</span>Seu carrinho está vazio.<br><small>Adicione peças para começar.</small></div>';return}
+  if(!cart.length){b.innerHTML='<div class="empty" style="padding:60px 20px"><span class="big-i">🛒</span>Seu carrinho está vazio.<br><small>Adicione peças para começar.</small></div>';return}
   b.innerHTML='';
   cart.forEach((it,i)=>{
     const t=it.img?'<img src="'+esc(it.img)+'" alt="">':(it.nome||'').trim().charAt(0).toUpperCase();
