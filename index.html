@@ -1,4 +1,4 @@
-?<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR" data-tema="preto"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sua Lingerie · Loja Online</title>
@@ -281,12 +281,19 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .hero-old{font-size:16px;color:var(--mut);text-decoration:line-through;font-weight:600;margin-left:10px}
 .hero-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
 .hero-btns .btn{min-width:170px}
+.hero-opts{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.hero-opts .ho-hd{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-bottom:2px}
+.hero-opts .chips{display:flex;flex-wrap:wrap;gap:7px}
+.hero-opts .chip{padding:7px 13px;font-size:13px;border-radius:9px;border:1px solid var(--line);background:#fff;color:var(--tx);font-weight:600;cursor:pointer}
+.hero-opts .chip.on{background:var(--cor);color:#fff;border-color:var(--cor)}
 .hero-media{position:relative;min-height:330px;cursor:zoom-in;background:var(--cor-suave)}
 .hero-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-media .hero-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px}
+@media(min-width:761px){.hero-media{order:-1}}
 @media(max-width:760px){
   .hero{grid-template-columns:1fr;min-height:0}
-  .hero-media{order:-1;min-height:0;aspect-ratio:4/3}
+  .hero-info{order:-1}
+  .hero-media{min-height:0;aspect-ratio:4/3}
   .hero-info{padding:22px 20px 26px;gap:9px}
   .hero-info h1{font-size:27px}
   .hero-info p{font-size:14px}
@@ -647,6 +654,14 @@ function renderBanner(){
   const sem=(+p.estoque||0)<=0;
   const selo=p._tag||'Destaque da semana';
   const precoDe=(+p.precoDe>0&&+p.precoDe>+p.preco)?('<span class="hero-old">'+R(p.precoDe)+'</span>'):'';
+  const temTams=!!(p.tams&&p.tams.length);
+  const temCors=!!(p.cors&&p.cors.length);
+  const selTam=(p.tams&&p.tams[0])||'', selCor=(p.cors&&p.cors[0])||'';
+  const optsHtml=(temTams||temCors)?
+    '<div class="hero-opts">'+
+      (temTams?'<div><div class="ho-hd">Tamanhos</div><div class="chips" id="heroTams">'+p.tams.map((t,k)=>'<button type="button" class="chip'+(k===0?' on':'')+'" data-htam="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div></div>':'')+
+      (temCors?'<div><div class="ho-hd">Cores</div><div class="chips" id="heroCors">'+p.cors.map((c,k)=>'<button type="button" class="chip'+(k===0?' on':'')+'" data-hcor="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div></div>':'')+
+    '</div>':'';
   box.innerHTML=
     '<div class="hero">'+
       '<div class="hero-info">'+
@@ -654,6 +669,7 @@ function renderBanner(){
         '<h1>'+esc(p.nome)+'</h1>'+
         (p.desc?'<p>'+esc(p.desc)+'</p>':'')+
         '<div class="hero-price">'+R(p.preco)+precoDe+'</div>'+
+        optsHtml+
         '<div class="hero-btns">'+
           '<button class="btn pri"'+(sem?' disabled':'')+' id="heroAdd">'+(sem?'Esgotado':'🛍️ Adicionar ao carrinho')+'</button>'+
           (sem?'':'<button class="btn wa" id="heroWa">Comprar pelo WhatsApp 💬</button>')+
@@ -662,7 +678,10 @@ function renderBanner(){
       '<div class="hero-media" id="heroMedia">'+img+'</div>'+
     '</div>';
   box.style.display='';
-  const add=box.querySelector('#heroAdd');if(add&&!sem)add.onclick=()=>abrirOpts(p);
+  heroSel={p,tam:selTam,cor:selCor};
+  box.querySelectorAll('[data-htam]').forEach(b=>b.onclick=()=>{heroSel.tam=b.dataset.htam;box.querySelectorAll('[data-htam]').forEach(x=>x.classList.toggle('on',x===b))});
+  box.querySelectorAll('[data-hcor]').forEach(b=>b.onclick=()=>{heroSel.cor=b.dataset.hcor;box.querySelectorAll('[data-hcor]').forEach(x=>x.classList.toggle('on',x===b))});
+  const add=box.querySelector('#heroAdd');if(add&&!sem)add.onclick=()=>abrirOpts(p,heroSel);
   const wa=box.querySelector('#heroWa');if(wa)wa.onclick=()=>msgProduto(p);
   const med=box.querySelector('#heroMedia');if(med&&fotos.length)med.onclick=()=>abrirLightbox(fotos,0);
 }
@@ -742,8 +761,12 @@ function render(){
 }
 
 /* ================= Carrinho ================= */
-function abrirOpts(p){
-  idOpts=Date.now();optAtual={p,tam:(p.tams&&p.tams[0])||'',cor:(p.cors&&p.cors[0])||'',qtd:1};
+let heroSel={p:null,tam:'',cor:''};
+function abrirOpts(p,sel){
+  sel=sel||{};
+  const tamIni=(sel.tam!=null&&sel.tam!=='')?sel.tam:((p.tams&&p.tams[0])||'');
+  const corIni=(sel.cor!=null&&sel.cor!=='')?sel.cor:((p.cors&&p.cors[0])||'');
+  idOpts=Date.now();optAtual={p,tam:tamIni,cor:corIni,qtd:1};
   const to=$('#optTop');
   const fotos=fotosDe(p);
   optAtual.foto=0;
