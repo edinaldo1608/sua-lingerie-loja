@@ -160,8 +160,9 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .foto-box img{width:100%;max-height:220px;object-fit:contain;display:block}
 .foto-box .ph{font-size:38px;line-height:1.4}
 .foto-box .ph small{display:block;font-size:12.5px;color:var(--mut);margin-top:4px}
-.foto-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.foto-slot{border:2px dashed var(--line);border-radius:var(--rad);background:#fff;min-height:110px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;text-align:center;color:var(--mut);transition:border-color .15s}
+.foto-gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(max-width:420px){.foto-gallery{grid-template-columns:repeat(2,1fr)}}
+.foto-slot{border:2px dashed var(--line);border-radius:var(--rad);background:#fff;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;position:relative;text-align:center;color:var(--mut);transition:border-color .15s}
 .foto-slot:hover{border-color:var(--cor)}
 .foto-slot.principal{border-style:solid;border-color:var(--cor)}
 .foto-slot img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}
@@ -348,14 +349,14 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
     <h3 id="cadTit">➕ Novo produto</h3>
     <p>Escolha a foto, preencha os dados e clique em Salvar produto.</p>
 
-    <label>Fotos do produto (até 3, do seu computador)</label>
+    <label>Fotos do produto (até 4, do seu computador)</label>
     <div class="foto-gallery" id="cadFotoGal"></div>
     <input type="file" id="cadFoto" accept="image/*" style="display:none" onchange="cadCarregarFoto(event)">
     <div style="display:flex;gap:8px;margin-top:8px">
       <button class="btn" style="flex:1" id="cadFotoAdd" onclick="document.getElementById('cadFoto').click()">🖼️ Escolher foto</button>
       <button class="btn" style="flex:1" id="cadFotoRem" onclick="cadRemoverFoto()">✖ Remover última</button>
     </div>
-    <p class="mini">Adicione até 3 fotos. Toque na ⭐ para escolher qual vira a <b>foto principal</b> (a que aparece na vitrine) e use ◀ ▶ para reordenar. Tudo fica guardado dentro do próprio site (sem precisar de internet).</p>
+    <p class="mini">Adicione até 4 fotos. Toque na ⭐ para escolher qual vira a <b>foto principal</b> (a que aparece na vitrine) e use ◀ ▶ para reordenar. Tudo fica guardado dentro do próprio site (sem precisar de internet).</p>
 
     <label>Nome do produto *</label>
     <input id="cadNome" placeholder="Ex.: Sutiã renda com bojo">
@@ -430,6 +431,7 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 const LS='sualingerie.site.v2';
 const WA_PADRAO='5583996382884';
 const IG_PADRAO='sualingerie.jp';
+const MAX_FOTOS=4; /* quantidade máxima de fotos por produto */
 
 /* ================= Nuvem (Supabase) =================
    COLE AQUI a URL e a chave "anon public" do SEU projeto Supabase.
@@ -746,10 +748,10 @@ function lerDoApp(){
 function normalizar(p){
   let imgs=p.imgs||p.fotos||p.images;
   if(imgs&&!Array.isArray(imgs))imgs=[imgs];
-  imgs=(imgs||[]).map(s=>String(s||'').trim()).filter(Boolean).slice(0,3);
+  imgs=(imgs||[]).map(s=>String(s||'').trim()).filter(Boolean).slice(0,MAX_FOTOS);
   const principal=p.img||p.foto||p.imagem||p.url||imgs[0]||'';
   if(principal&&!imgs.includes(principal))imgs.unshift(principal);
-  imgs=[...new Set(imgs)].slice(0,3);
+  imgs=[...new Set(imgs)].slice(0,MAX_FOTOS);
   return {cod:p.cod||p.codigo||p.id||'',nome:p.nome||p.descricao||p.name||'Produto',cat:p.cat||p.categoria||p.grupo||'Outros',
     tams:Array.isArray(p.tams)?p.tams:(p.tamanho?String(p.tamanho).split(/[,\/|]/).map(s=>s.trim()).filter(Boolean):[]),
     cors:Array.isArray(p.cors)?p.cors:(p.cor?String(p.cor).split(/[,\/|]/).map(s=>s.trim()).filter(Boolean):[]),
@@ -901,11 +903,11 @@ function fotosDe(p){
   if(Array.isArray(p.imgs))arr.push(...p.imgs.filter(Boolean));
   else if(p.imgs&&typeof p.imgs==='string')arr.push(p.imgs);
   if(p.img)arr.unshift(p.img);
-  return [...new Set(arr.filter(Boolean))].slice(0,3);
+  return [...new Set(arr.filter(Boolean))].slice(0,MAX_FOTOS);
 }
 function renderFotosCad(){
   const box=$('#cadFotoGal');if(!box)return;box.innerHTML='';
-  for(let i=0;i<3;i++){
+  for(let i=0;i<MAX_FOTOS;i++){
     const src=cadFotos[i];
     const slot=document.createElement('div');
     slot.className='foto-slot'+(i===0&&src?' principal':'');
@@ -932,7 +934,7 @@ function renderFotosCad(){
     }
     box.appendChild(slot);
   }
-  const add=$('#cadFotoAdd');if(add)add.disabled=cadFotos.length>=3;
+  const add=$('#cadFotoAdd');if(add)add.disabled=cadFotos.length>=MAX_FOTOS;
   const rem=$('#cadFotoRem');if(rem)rem.disabled=cadFotos.length===0;
 }
 function definirFotoPrincipal(i){
@@ -949,7 +951,7 @@ function moverFotoCad(i,dir){
 }
 function cadCarregarFoto(ev){
   const f=ev.target.files&&ev.target.files[0];if(!f)return;
-  if(cadFotos.length>=3){ev.target.value='';return toast('Máximo de 3 fotos por produto')}
+  if(cadFotos.length>=MAX_FOTOS){ev.target.value='';return toast('Máximo de '+MAX_FOTOS+' fotos por produto')}
   if(!/^image\//.test(f.type)){ev.target.value='';return toast('Escolha um arquivo de imagem')}
   const rd=new FileReader();
   rd.onload=e=>{
