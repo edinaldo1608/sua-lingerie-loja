@@ -185,23 +185,34 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .optgal{display:flex;gap:6px;justify-content:center;margin-bottom:10px;flex-wrap:wrap}
 .optgal img{width:74px;height:74px;object-fit:cover;border-radius:10px;border:2px solid var(--line);cursor:pointer}
 .optgal img.on{border-color:var(--cor)}
+/* Modal de opções: foto no topo, corpo rolável, rodapé fixo */
+#mOpts.modal>div{padding:0;max-width:440px;display:flex;flex-direction:column;overflow:hidden;max-height:92vh}
+.optmain{flex:0 0 auto;background:var(--cor-suave);line-height:0}
+.optmain img{width:100%;height:180px;object-fit:cover;display:block;cursor:zoom-in}
+.opt-body{padding:16px 20px 4px;overflow:auto;flex:1 1 auto;min-height:0}
+.opt-foot{flex:0 0 auto;display:flex;gap:10px;padding:14px 20px calc(16px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(0,0,0,.05)}
 .mini{font-size:12.5px;color:var(--mut);line-height:1.5;margin:8px 0 0}
 /* Lightbox (foto ampliada) */
 .pimg-main{cursor:zoom-in}
 .optgal img{cursor:zoom-in}
-.lightbox{position:fixed;inset:0;background:rgba(10,8,12,.94);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;-webkit-tap-highlight-color:transparent}
+.lightbox{position:fixed;inset:0;background:rgba(10,8,12,.94);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:center;padding:12px;-webkit-tap-highlight-color:transparent}
 .lightbox.on{display:flex;animation:lbIn .2s ease}
 @keyframes lbIn{from{opacity:0}to{opacity:1}}
-.lightbox img{max-width:96vw;max-height:88vh;object-fit:contain;border-radius:12px;box-shadow:0 10px 50px rgba(0,0,0,.6);animation:lbZoom .25s cubic-bezier(.2,.8,.3,1)}
+.lightbox img{display:block;width:100%;height:100%;max-width:96vw;max-height:78vh;object-fit:contain;border-radius:12px;box-shadow:0 10px 50px rgba(0,0,0,.6);animation:lbZoom .25s cubic-bezier(.2,.8,.3,1);background:rgba(255,255,255,.04)}
+.lightbox .lb-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px;width:100%;max-width:560px}
+.lightbox .lb-actions .btn{flex:1;min-width:150px;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.lightbox img,.lightbox button,.lightbox .lb-actions{cursor:default}
+.lightbox{cursor:zoom-out}
+.lightbox img{cursor:zoom-out}
 @keyframes lbZoom{from{transform:scale(.9);opacity:.6}to{transform:scale(1);opacity:1}}
-.lightbox .lb-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.lightbox .lb-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:14px;width:auto;height:44px;padding:0 16px;border-radius:22px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:15px;font-weight:700;line-height:1;cursor:pointer;display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px)}
 .lightbox .lb-close:hover{background:rgba(255,255,255,.3)}
 .lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .lightbox .lb-nav:hover{background:rgba(255,255,255,.3)}
 .lightbox .lb-nav.prev{left:calc(10px + env(safe-area-inset-left,0px))}
 .lightbox .lb-nav.next{right:calc(10px + env(safe-area-inset-right,0px))}
 .lightbox .lb-count{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:.5px}
-@media(max-width:520px){.lightbox .lb-nav{width:40px;height:40px;font-size:22px}}
+@media(max-width:520px){.lightbox .lb-nav{width:40px;height:40px;font-size:22px}.lightbox .lb-actions .btn{min-width:0;font-size:14px}.lightbox .lb-count{bottom:auto;top:calc(14px + env(safe-area-inset-top,0px));left:50%}}
 .qtyin{display:flex;align-items:center;gap:16px}
 .qtyin button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--tx);font-size:19px;cursor:pointer}
 .qtyin b{min-width:28px;text-align:center;font-size:18px}
@@ -210,36 +221,41 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .temas button.on{border-color:var(--tx)}
 /* Janela de detalhes do produto */
 .pview .pcard{cursor:pointer}
-#mProd.modal>div{max-width:860px;padding:0;overflow:hidden;position:relative;max-height:92vh}
-.pd-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;max-height:92vh}
-.pd-gal{background:var(--cor-suave);position:relative;display:flex;flex-direction:column;min-height:280px}
-.pd-main{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;background:var(--cor-suave)}
-.pd-main img{width:100%;height:100%;object-fit:cover;cursor:zoom-in;display:block}
+#mProd.modal>div{max-width:860px;padding:0;overflow:hidden;position:relative;max-height:88vh;display:flex;flex-direction:column}
+.pd-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;max-height:88vh;overflow:hidden}
+.pd-gal{background:var(--cor-suave);position:relative;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.pd-main{flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;background:var(--cor-suave);min-height:0}
+.pd-main img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;cursor:zoom-in;display:block}
 .pd-main .pd-ph{font-size:80px}
-.pd-thumbs{display:flex;gap:8px;padding:10px;justify-content:center;flex-wrap:wrap;background:rgba(255,255,255,.6)}
-.pd-thumbs img{width:54px;height:54px;object-fit:cover;border-radius:8px;border:2px solid var(--line);cursor:pointer}
+.pd-thumbs{display:flex;gap:8px;padding:10px;justify-content:center;flex-wrap:wrap;background:rgba(255,255,255,.9);flex:0 0 auto}
+.pd-thumbs img{width:50px;height:50px;object-fit:cover;border-radius:8px;border:2px solid var(--line);cursor:pointer}
 .pd-thumbs img.on{border-color:var(--cor)}
 .pd-thumbs img:hover{border-color:var(--cor)}
 .pd-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:3;border:0;background:rgba(0,0,0,.4);color:#fff;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center}
 .pd-nav.prev{left:10px}
 .pd-nav.next{right:10px}
-.pd-info{padding:26px 24px;overflow-y:auto;display:flex;flex-direction:column}
+.pd-info{padding:22px 24px 16px;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
 .pd-cat{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--cor);margin-bottom:6px}
 .pd-info h3{margin:0 0 8px;font:700 23px Georgia,serif;color:var(--tx)}
 .pd-desc{color:var(--mut);font-size:14px;line-height:1.6;margin:0 0 14px}
 .pd-price{font-size:27px;font-weight:800;color:var(--cor);margin:2px 0 14px}
 .pd-close{position:absolute;top:12px;right:12px;z-index:5;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font-size:19px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .pd-close:hover{background:rgba(0,0,0,.65)}
-.pd-actions{margin-top:auto;padding-top:16px;display:flex;flex-direction:column;gap:8px}
+.pd-scroll{overflow-y:auto;flex:1 1 auto;min-height:0}
+.pd-actions{padding-top:16px;display:flex;flex-direction:column;gap:8px}
 @media(max-width:720px){
-  #mProd.modal{padding:12px}
-  #mProd.modal>div{max-height:94vh}
-  .pd-wrap{grid-template-columns:1fr}
-  .pd-gal{min-height:0}
-  .pd-main{aspect-ratio:1/1}
-  .pd-info{padding:18px 16px;max-height:48vh}
-  .pd-info h3{font-size:20px}
-  .pd-price{font-size:23px}
+  #mProd.modal{padding:8px}
+  #mProd.modal>div{max-height:96vh;height:96vh;display:flex;flex-direction:column;overflow:hidden;border-radius:12px}
+  .pd-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;max-height:none;height:100%;min-height:0;overflow:hidden}
+  .pd-gal{min-height:0;flex:0 0 auto;background:var(--cor-suave)}
+  .pd-main{aspect-ratio:4/3;max-height:34vh}
+  .pd-thumbs{padding:6px;gap:6px;background:rgba(255,255,255,.95)}
+  .pd-thumbs img{width:46px;height:46px}
+  .pd-info{padding:14px 16px 8px;overflow-y:auto;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+  .pd-info h3{font-size:18px;margin-bottom:4px}
+  .pd-price{font-size:22px;margin:2px 0 10px}
+  .pd-scroll{overflow-y:auto;flex:1 1 auto;min-height:0}
+  .pd-actions{flex:0 0 auto;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));margin:0 -16px -8px;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.08);position:sticky;bottom:0;z-index:4}
 }
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:#20252b;color:#fff;padding:12px 20px;border-radius:99px;z-index:100;display:none;font-weight:600;box-shadow:var(--sh2)}
 .fab{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:40}
@@ -396,11 +412,12 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 <div class="modal" id="mProd"><div id="prodTop"></div></div>
 
 <div class="lightbox" id="lightbox" onclick="fecharLightbox(event)">
-  <button class="lb-close" title="Fechar" onclick="fecharLightbox(event)">✕</button>
+  <button class="lb-close" title="Fechar" onclick="event.stopPropagation();fecharLightbox()">✕ Fechar</button>
   <button class="lb-nav prev" title="Foto anterior" onclick="navLightbox(-1,event)">‹</button>
   <img id="lbImg" src="" alt="Foto ampliada">
   <button class="lb-nav next" title="Próxima foto" onclick="navLightbox(1,event)">›</button>
   <div class="lb-count" id="lbCount"></div>
+  <div class="lb-actions" id="lbActions"></div>
 </div>
 
 <div class="modal" id="mCad">
@@ -647,15 +664,24 @@ function abrirOpts(p){
   idOpts=Date.now();optAtual={p,tam:(p.tams&&p.tams[0])||'',cor:(p.cors&&p.cors[0])||'',qtd:1};
   const to=$('#optTop');
   const fotos=fotosDe(p);
+  optAtual.foto=0;
+  const mainFoto=fotos.length?('<div class="optmain"><img id="optImg" src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'"></div>'):'';
   const gal=fotos.length?('<div class="optgal">'+fotos.map((s,k)=>'<img src="'+esc(s)+'" class="'+(k===0?'on':'')+'" alt="" data-gidx="'+k+'">').join('')+'</div>'):'';
-  to.innerHTML=(gal?'<div style="position:relative">'+gal+'</div>':'')+'<h3>'+esc(p.nome)+'</h3><p>'+R(p.preco)+' · Escolha as opções:</p>'+
-    ((p.tams&&p.tams.length)?'<label>Tamanho</label><div class="chips">'+p.tams.map(t=>'<button class="chip'+(t===optAtual.tam?' on':'')+'" data-tam="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div>':'')+
-    ((p.cors&&p.cors.length)?'<label>Cor</label><div class="chips">'+p.cors.map(c=>'<button class="chip'+(c===optAtual.cor?' on':'')+'" data-cor="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>':'')+
-    '<label>Quantidade</label><div class="qtyin"><button id="oM">−</button><b id="oQ">1</b><button id="oP">+</button></div>'+
-    '<div style="display:flex;gap:10px;margin-top:20px"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">Adicionar 🛍️</button></div>';
+  to.innerHTML=
+    mainFoto+
+    '<div class="opt-body">'+
+      (gal?'<div style="position:relative">'+gal+'</div>':'')+
+      '<h3>'+esc(p.nome)+'</h3><p>'+R(p.preco)+' · Escolha as opções:</p>'+
+      ((p.tams&&p.tams.length)?'<label>Tamanho</label><div class="chips">'+p.tams.map(t=>'<button class="chip'+(t===optAtual.tam?' on':'')+'" data-tam="'+esc(t)+'">'+esc(t)+'</button>').join('')+'</div>':'')+
+      ((p.cors&&p.cors.length)?'<label>Cor</label><div class="chips">'+p.cors.map(c=>'<button class="chip'+(c===optAtual.cor?' on':'')+'" data-cor="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>':'')+
+      '<label>Quantidade</label><div class="qtyin"><button id="oM">−</button><b id="oQ">1</b><button id="oP">+</button></div>'+
+    '</div>'+
+    '<div class="opt-foot"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">Adicionar 🛍️</button></div>';
   to.querySelectorAll('[data-tam]').forEach(b=>b.onclick=()=>{optAtual.tam=b.dataset.tam;to.querySelectorAll('[data-tam]').forEach(x=>x.classList.toggle('on',x===b))});
   to.querySelectorAll('[data-cor]').forEach(b=>b.onclick=()=>{optAtual.cor=b.dataset.cor;to.querySelectorAll('[data-cor]').forEach(x=>x.classList.toggle('on',x===b))});
-  to.querySelectorAll('[data-gidx]').forEach(im=>{im.onclick=()=>{optAtual.foto=+im.dataset.gidx;to.querySelectorAll('[data-gidx]').forEach(x=>x.classList.toggle('on',x===im));abrirLightbox(fotos,optAtual.foto)}});
+  to.querySelectorAll('[data-gidx]').forEach(im=>{im.onclick=()=>{optAtual.foto=+im.dataset.gidx;to.querySelectorAll('[data-gidx]').forEach(x=>x.classList.toggle('on',x===im));const m=to.querySelector('#optImg');if(m)m.src=fotos[optAtual.foto]}});
+  const optImg=to.querySelector('#optImg');
+  if(optImg)optImg.onclick=()=>abrirLightbox(fotos,optAtual.foto);
   optAtual.foto=0;
   to.querySelector('#oM').onclick=()=>{optAtual.qtd=Math.max(1,optAtual.qtd-1);to.querySelector('#oQ').textContent=optAtual.qtd};
   to.querySelector('#oP').onclick=()=>{optAtual.qtd=Math.min(99,optAtual.qtd+1);to.querySelector('#oQ').textContent=optAtual.qtd};
@@ -664,8 +690,13 @@ function abrirOpts(p){
 function fecharOpts(){$('#mOpts').classList.remove('on')}
 
 /* ================= Lightbox (foto ampliada) ================= */
-let lbFotos=[],lbIdx=0;
-function abrirLightbox(fotos,idx){fotos=(fotos||[]).filter(Boolean);if(!fotos.length)return;lbFotos=fotos;lbIdx=Math.max(0,Math.min(idx||0,fotos.length-1));atualizarLightbox();$('#lightbox').classList.add('on')}
+let lbFotos=[],lbIdx=0,lbAcoes=null;
+function abrirLightbox(fotos,idx,acoes){
+  fotos=(fotos||[]).filter(Boolean);if(!fotos.length)return;
+  lbFotos=fotos;lbIdx=Math.max(0,Math.min(idx||0,fotos.length-1));lbAcoes=acoes||null;atualizarLightbox();$('#lightbox').classList.add('on');
+  const box=$('#lbActions');
+  if(box){box.innerHTML=lbAcoes||'';/* o conteúdo vem com onclicks inline */}
+}
 function atualizarLightbox(){
   const im=$('#lbImg');if(!im||!lbFotos.length)return;
   im.src=lbFotos[lbIdx];
@@ -677,9 +708,14 @@ function atualizarLightbox(){
 }
 function navLightbox(dir,ev){if(ev)ev.stopPropagation();if(lbFotos.length<2)return;lbIdx=(lbIdx+dir+lbFotos.length)%lbFotos.length;atualizarLightbox()}
 function fecharLightbox(ev){
-  if(ev&&ev.target&&ev.target.id==='lbImg')return; /* clicar na própria imagem não fecha */
+  if(ev&&ev.target){
+    /* clicar na imagem, no contador ou em elementos internos (ações/nav) não fecha */
+    if(ev.target===document.querySelector('#lbImg'))return;
+    if(ev.target.closest&&ev.target.closest('.lb-actions,.lb-nav,.lb-count,.lb-close'))return;
+  }
   $('#lightbox').classList.remove('on');
   const im=$('#lbImg');if(im)im.src='';
+  const box=$('#lbActions');if(box)box.innerHTML='';
 }
 document.addEventListener('keydown',e=>{
   const lb=$('#lightbox');if(!lb||!lb.classList.contains('on'))return;
@@ -714,14 +750,16 @@ function abrirProduto(p){
         '<div class="pd-main">'+navHtml+imgHtml+'</div>'+thumbsHtml+
       '</div>'+
       '<div class="pd-info">'+
-        '<div class="pd-cat">'+esc(cat)+'</div>'+
-        '<h3>'+esc(p.nome)+'</h3>'+
-        (p.cod?'<div class="pinfo" style="margin-bottom:10px">Cód: '+esc(p.cod)+'</div>':'')+
-        (p.desc?'<p class="pd-desc">'+esc(p.desc)+'</p>':'')+
-        '<div class="pd-price">'+R(p.preco)+'</div>'+
-        (sem?'<div class="pinfo" style="color:#c0392b;font-weight:700">Esgotado no momento</div>':'')+
-        tamsHtml+corsHtml+
-        '<label>Quantidade</label><div class="qtyin"><button id="pdM">−</button><b id="pdQ">1</b><button id="pdP">+</button></div>'+
+        '<div class="pd-scroll">'+
+          '<div class="pd-cat">'+esc(cat)+'</div>'+
+          '<h3>'+esc(p.nome)+'</h3>'+
+          (p.cod?'<div class="pinfo" style="margin-bottom:10px">Cód: '+esc(p.cod)+'</div>':'')+
+          (p.desc?'<p class="pd-desc">'+esc(p.desc)+'</p>':'')+
+          '<div class="pd-price">'+R(p.preco)+'</div>'+
+          (sem?'<div class="pinfo" style="color:#c0392b;font-weight:700">Esgotado no momento</div>':'')+
+          tamsHtml+corsHtml+
+          '<label>Quantidade</label><div class="qtyin"><button id="pdM">−</button><b id="pdQ">1</b><button id="pdP">+</button></div>'+
+        '</div>'+
         '<div class="pd-actions">'+
           '<button class="btn pri full" id="pdAdd" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':'🛍️ Adicionar ao carrinho')+'</button>'+
           (sem?'':'<button class="btn wa full" id="pdWa">Comprar pelo WhatsApp 💬</button>')+
@@ -737,7 +775,10 @@ function abrirProduto(p){
   if(pv)pv.onclick=(e)=>{e.stopPropagation();setPdFoto(prodAtual.foto-1)};
   if(nx)nx.onclick=(e)=>{e.stopPropagation();setPdFoto(prodAtual.foto+1)};
   thumbs.forEach(im=>im.onclick=()=>setPdFoto(+im.dataset.pdi));
-  if(pdImg)pdImg.onclick=()=>abrirLightbox(fotos,prodAtual.foto);
+  if(pdImg)pdImg.onclick=()=>abrirLightbox(fotos,prodAtual.foto,
+    (sem?'':'<button class="btn pri" onclick="event.stopPropagation();addCart(prodAtual.p,prodAtual.tam,prodAtual.cor,prodAtual.qtd);fecharLightbox();fecharProduto();toast(\'Adicionado ao carrinho 🛍️\')">🛍️ Adicionar ao carrinho</button>')+
+    (sem?'':'<button class="btn wa" onclick="event.stopPropagation();msgProduto(prodAtual.p)">Comprar pelo WhatsApp 💬</button>')+
+    '<button class="btn" onclick="event.stopPropagation();fecharLightbox()">Voltar</button>');
 
   /* opções */
   t.querySelectorAll('[data-pdtam]').forEach(b=>b.onclick=()=>{prodAtual.tam=b.dataset.pdtam;t.querySelectorAll('[data-pdtam]').forEach(x=>x.classList.toggle('on',x===b))});
