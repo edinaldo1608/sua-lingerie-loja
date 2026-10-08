@@ -321,11 +321,6 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 <div class="catnav"><div class="wrap"><div class="catnav-scroll" id="cats"></div></div></div>
 
 <div class="wrap">
-  <section class="sec" id="secCats">
-    <div class="sec-hd"><h2>Categorias</h2></div>
-    <div class="catrow" id="catrow"></div>
-  </section>
-
   <section id="heroBox" class="sec" style="display:none"></section>
 
   <section class="sec">
@@ -620,9 +615,13 @@ function aplicarTema(){document.documentElement.setAttribute('data-tema',CFG.tem
 function categorias(){const m={};CFG.produtos.forEach(p=>{const c=(p.cat||'Outros').trim()||'Outros';m[c]=(m[c]||0)+1});return m}
 function renderCats(){
   const box=$('#cats'),cr=$('#catrow'),m=categorias();
-  box.innerHTML='';cr.innerHTML='';
-  const all=document.createElement('button');all.textContent='Todos';all.className=(cat==='Todos'?'on':'');all.onclick=()=>selCat('Todos');box.appendChild(all);
-  Object.keys(m).sort().forEach(c=>{const b=document.createElement('button');b.textContent=c+' ('+m[c]+')';b.className=(cat===c?'on':'');b.onclick=()=>selCat(c);box.appendChild(b)});
+  if(box)box.innerHTML='';
+  if(cr)cr.innerHTML='';
+  if(box){
+    const all=document.createElement('button');all.textContent='Todos';all.className=(cat==='Todos'?'on':'');all.onclick=()=>selCat('Todos');box.appendChild(all);
+    Object.keys(m).sort().forEach(c=>{const b=document.createElement('button');b.textContent=c+' ('+m[c]+')';b.className=(cat===c?'on':'');b.onclick=()=>selCat(c);box.appendChild(b)});
+  }
+  if(!cr)return;
   const ic={'sutiã':'👙','calcinha':'🩲','conjunto':'💝','body':'👗','camisola':'🛌','pijama':'🎀','meia':'🧦','biquíni':'👙'};
   Object.keys(m).sort().forEach(c=>{
     const ex=CFG.produtos.find(p=>(p.cat||'Outros')===c&&p.img);
