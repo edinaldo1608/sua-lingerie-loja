@@ -631,7 +631,7 @@ function render(){
       (p.desc?'<div class="pdesc">'+esc(p.desc)+'</div>':'')+
       '<div class="pinfo">'+esc((p.tams||[]).join(' · ')||'')+(p.cors&&p.cors.length?' · '+esc(p.cors.join(', ')):'')+'</div>'+
       '<div class="pprice">'+R(p.preco)+'</div>'+
-      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛍️ '+esc(p._tag):'🛍️ Adicionar'))+'</button>'+
+      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛍️ '+esc(p._tag):'🛍️ Adicionar Carrinho'))+'</button>'+
       (sem?'':'<button class="btn wa full" style="margin-top:8px">Comprar pelo WhatsApp 💬</button>')+'</div></div>';
     el.querySelector('.pactions .pri').onclick=()=>abrirOpts(p);
     const waBtn=el.querySelector('.pactions .wa');if(waBtn)waBtn.onclick=()=>msgProduto(p);
