@@ -192,6 +192,10 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .opt-body{padding:16px 20px 4px;overflow:auto;flex:1 1 auto;min-height:0}
 .opt-foot{flex:0 0 auto;display:flex;gap:10px;padding:14px 20px calc(16px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(0,0,0,.05)}
 .mini{font-size:12.5px;color:var(--mut);line-height:1.5;margin:8px 0 0}
+/* Fallback de imagem quebrada (mostra emoji da categoria) */
+.img-emoji{font-size:54px;line-height:1;display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+.cthumb .img-emoji{font-size:28px}
+.catcard .ccimg .img-emoji{font-size:44px}
 /* Lightbox (foto ampliada) */
 .pimg-main{cursor:zoom-in}
 .optgal img{cursor:zoom-in}
@@ -556,7 +560,7 @@ async function iniciarSDK(){
   }catch(e){console.warn('Supabase não carregou — usando modo local.',e);SB=null}
 }
 
-let CFG={marca:'Sua Lingerie',wa:WA_PADRAO,ig:IG_PADRAO,msg:'Olá! Quero fazer um pedido:',tema:'preto',produtos:[]};
+let CFG={marca:'Sua Lingerie',wa:WA_PADRAO,ig:IG_PADRAO,msg:'Olá! Quero fazer um pedido:',tema:'preto',produtos:[],categorias:[]};
 try{const s=localStorage.getItem(LS);if(s)CFG=Object.assign(CFG,JSON.parse(s))}catch(e){}
 const save=()=>{
   try{localStorage.setItem(LS,JSON.stringify(CFG))}catch(e){}
@@ -589,7 +593,7 @@ function aplicarNuvem(dados){
 }
 
 const EXEMPLOS=[
-  {cod:'L001',nome:'Sutiã com bojo renda',cat:'Sutiã',tams:['40','42','44','46'],cors:['Preto','Vinho','Nude'],preco:89.9,estoque:8,img:'https://images.unsplash.com/photo-1594224457860-02d7dcc9b5ee?w=600&q=80',desc:'Renda macia com bojo removível e alças ajustáveis.',_tag:'Novidade'},
+  {cod:'L001',nome:'Sutiã com bojo renda',cat:'Sutiã',tams:['40','42','44','46'],cors:['Preto','Vinho','Nude'],preco:89.9,estoque:8,img:'',desc:'Renda macia com bojo removível e alças ajustáveis.',_tag:'Novidade'},
   {cod:'L002',nome:'Calcinha de renda fina',cat:'Calcinha',tams:['P','M','G'],cors:['Vinho','Preto','Rosa'],preco:34.9,estoque:15,img:'',desc:'Renda delicada com toque suave e caimento perfeito.'},
   {cod:'L003',nome:'Conjunto renda completo',cat:'Conjunto',tams:['P','M','G'],cors:['Branco','Preto'],preco:129.9,estoque:5,img:'',desc:'Conjunto sutiã + calcinha em renda premium.',_tag:'Mais vendido'},
   {cod:'L004',nome:'Body de tule bordado',cat:'Body',tams:['P','M'],cors:['Preto'],preco:119.9,estoque:3,img:'',desc:'Tule bordado com alças ajustáveis e fechamento inferior.'},
@@ -612,22 +616,34 @@ const TEMAS=[['vinho','#7a1f3d'],['rosa','#d6336c'],['nude','#a56b4e'],['roxo','
 function aplicarTema(){document.documentElement.setAttribute('data-tema',CFG.tema||'preto');const box=$('#temas');if(!box)return;box.innerHTML='';TEMAS.forEach(([nome,cor])=>{const b=document.createElement('button');b.style.background=cor;b.title=nome;b.className=(CFG.tema===nome?'on':'');b.onclick=()=>{CFG.tema=nome;save();aplicarTema()};box.appendChild(b)})}
 
 /* ================= Categorias ================= */
-function categorias(){const m={};CFG.produtos.forEach(p=>{const c=(p.cat||'Outros').trim()||'Outros';m[c]=(m[c]||0)+1});return m}
+/* Contagem por categoria (só produtos). Categorias vazias ficam com 0. */
+function contagemCats(){const m={};CFG.produtos.forEach(p=>{const c=(p.cat||'Outros').trim()||'Outros';m[c]=(m[c]||0)+1});return m}
+/* Lista final de categorias, NA ORDEM definida em CFG.categorias.
+   Categorias usadas em produtos mas ainda não salvas entram no fim (ordem alfabética). */
+function listaCats(){
+  const usadas=Object.keys(contagemCats());
+  const salvas=(CFG.categorias||[]).map(c=>String(c).trim()).filter(c=>c&&c.toLowerCase()!=='todos');
+  const conhecidas=new Set(salvas.map(c=>c.toLowerCase()));
+  const extras=usadas.filter(c=>c.toLowerCase()!=='todos'&&!conhecidas.has(c.toLowerCase()))
+                     .sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  return [...salvas,...extras];
+}
+function categorias(){const m=contagemCats();listaCats().forEach(c=>{if(!(c in m))m[c]=0});return m}
 function renderCats(){
   const box=$('#cats'),cr=$('#catrow'),m=categorias();
   if(box)box.innerHTML='';
   if(cr)cr.innerHTML='';
   if(box){
     const all=document.createElement('button');all.textContent='Todos';all.className=(cat==='Todos'?'on':'');all.onclick=()=>selCat('Todos');box.appendChild(all);
-    Object.keys(m).sort().forEach(c=>{const b=document.createElement('button');b.textContent=c+' ('+m[c]+')';b.className=(cat===c?'on':'');b.onclick=()=>selCat(c);box.appendChild(b)});
+    listaCats().forEach(c=>{const b=document.createElement('button');b.textContent=c+' ('+(m[c]||0)+')';b.className=(cat===c?'on':'');b.onclick=()=>selCat(c);box.appendChild(b)});
   }
   if(!cr)return;
-  const ic={'sutiã':'👙','calcinha':'🩲','conjunto':'💝','body':'👗','camisola':'🛌','pijama':'🎀','meia':'🧦','biquíni':'👙'};
-  Object.keys(m).sort().forEach(c=>{
+  const ic={'sutiã':'👙','calcinha':'🩲','conjunto':'💝','body':'👗','camisola':'🛌','pijama':'🎀','meia':'🧦','biquíni':'👙','robe':'🛁'};
+  listaCats().forEach(c=>{
     const ex=CFG.produtos.find(p=>(p.cat||'Outros')===c&&p.img);
-    const img=ex?'<img src="'+esc(ex.img)+'" loading="lazy" alt="">':(ic[c.toLowerCase()]||'🌸');
+    const img=ex?'<img src="'+esc(ex.img)+'" loading="lazy" alt="" data-emoji="'+esc(icoDe({cat:c}))+'" onerror="imgFalhou(this)">':(ic[c.toLowerCase()]||'🌸');
     const btn=document.createElement('button');btn.className='catcard';
-    btn.innerHTML='<div class="ccimg">'+img+'</div><span>'+esc(c)+'<br><small style="color:var(--mut);font-weight:400">'+m[c]+' itens</small></span>';
+    btn.innerHTML='<div class="ccimg">'+img+'</div><span>'+esc(c)+'<br><small style="color:var(--mut);font-weight:400">'+(m[c]||0)+' itens</small></span>';
     btn.onclick=()=>{selCat(c);irParaGrid()};
     cr.appendChild(btn);
   });
@@ -649,7 +665,7 @@ function renderBanner(){
   if(!p){box.style.display='none';box.innerHTML='';return}
   const ic={'sutiã':'👙','calcinha':'🩲','conjunto':'💝','body':'👗','camisola':'🛌','pijama':'🎀','meia':'🧦','biquíni':'👙'};
   const fotos=fotosDe(p);
-  const img=fotos.length?('<img src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'">'):('<span class="hero-ph">'+(ic[(p.cat||'').toLowerCase()]||'🌸')+'</span>');
+  const img=fotos.length?('<img src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'" data-emoji="'+esc(icoDe(p))+'" onerror="imgFalhou(this)">'):('<span class="hero-ph">'+(ic[(p.cat||'').toLowerCase()]||'🌸')+'</span>');
   const sem=(+p.estoque||0)<=0;
   const selo=p._tag||'Destaque da semana';
   const precoDe=(+p.precoDe>0&&+p.precoDe>+p.preco)?('<span class="hero-old">'+R(p.precoDe)+'</span>'):'';
@@ -712,6 +728,16 @@ function filtrados(){
   else if(o==='nome')list=[...list].sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
   return list;
 }
+/* ===== Helper: emoji da categoria + imagem com fallback seguro ===== */
+const IC_CAT={'sutiã':'👙','calcinha':'🩲','conjunto':'💝','body':'👗','camisola':'🛌','pijama':'🎀','meia':'🧦','biquíni':'👙'};
+const icoDe=p=>IC_CAT[((p&&p.cat)||'').toLowerCase().trim()]||'🌸';
+/* Substitui uma <img> que falhou por um emoji da categoria (sem re-tentar em loop) */
+function imgFalhou(img){
+  const em=img.getAttribute('data-emoji')||'🌸';
+  const span=document.createElement('span');
+  span.className='img-emoji';span.textContent=em;
+  img.replaceWith(span);
+}
 function render(){
   const box=$('#grid'),list=filtrados(),ic={'sutiã':'👙','calcinha':'🩲','conjunto':'💝','body':'👗','camisola':'🛌','pijama':'🎀','meia':'🧦','biquíni':'👙'};
   $('#resCount').textContent=list.length+(list.length===1?' produto':' produtos');
@@ -719,7 +745,7 @@ function render(){
   if(!list.length){box.innerHTML='<div class="empty"><span class="big-i">🔍</span>Nenhum produto encontrado.<br><small>Toque em ⚙️ para carregar seus produtos.</small></div>';return}
   list.forEach((p,i)=>{
     const fotos=fotosDe(p);
-    const img=fotos.length?('<img class="pimg-main" src="'+esc(fotos[0])+'" loading="lazy" alt="'+esc(p.nome)+'" data-idx="0">'):(ic[(p.cat||'').toLowerCase()]||'🌸');
+    const img=fotos.length?('<img class="pimg-main" src="'+esc(fotos[0])+'" loading="lazy" alt="'+esc(p.nome)+'" data-idx="0" data-emoji="'+esc(icoDe(p))+'" onerror="imgFalhou(this)">'):(ic[(p.cat||'').toLowerCase()]||'🌸');
     const dots=fotos.length>1?('<div class="pdots">'+fotos.map((_,k)=>'<i class="'+(k===0?'on':'')+'"></i>').join('')+'</div>'):'';
     const nav=fotos.length>1?('<button class="pnav prev" title="Foto anterior">‹</button><button class="pnav next" title="Próxima foto">›</button>'):'';
     const sem=(+p.estoque||0)<=0;
@@ -769,8 +795,8 @@ function abrirOpts(p,sel){
   const to=$('#optTop');
   const fotos=fotosDe(p);
   optAtual.foto=0;
-  const mainFoto=fotos.length?('<div class="optmain"><img id="optImg" src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'"></div>'):'';
-  const gal=fotos.length?('<div class="optgal">'+fotos.map((s,k)=>'<img src="'+esc(s)+'" class="'+(k===0?'on':'')+'" alt="" data-gidx="'+k+'">').join('')+'</div>'):'';
+  const mainFoto=fotos.length?('<div class="optmain"><img id="optImg" src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'" data-emoji="'+esc(icoDe(p))+'" onerror="imgFalhou(this)"></div>'):'';
+  const gal=fotos.length?('<div class="optgal">'+fotos.map((s,k)=>'<img src="'+esc(s)+'" class="'+(k===0?'on':'')+'" alt="" data-gidx="'+k+'" onerror="imgFalhou(this)">').join('')+'</div>'):'';
   to.innerHTML=
     mainFoto+
     '<div class="opt-body">'+
@@ -839,10 +865,10 @@ function abrirProduto(p){
   const sem=(+p.estoque||0)<=0;
 
   const imgHtml=fotos.length
-    ?'<img id="pdImg" src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'">'
+    ?'<img id="pdImg" src="'+esc(fotos[0])+'" alt="'+esc(p.nome)+'" data-emoji="'+esc(icoDe(p))+'" onerror="imgFalhou(this)">'
     :'<div class="pd-ph">'+(ic[cat.toLowerCase()]||'🌸')+'</div>';
   const navHtml=fotos.length>1?'<button class="pd-nav prev" title="Anterior">‹</button><button class="pd-nav next" title="Próxima">›</button>':'';
-  const thumbsHtml=fotos.length>1?'<div class="pd-thumbs">'+fotos.map((s,k)=>'<img src="'+esc(s)+'" class="'+(k===0?'on':'')+'" data-pdi="'+k+'" alt="">').join('')+'</div>':'';
+  const thumbsHtml=fotos.length>1?'<div class="pd-thumbs">'+fotos.map((s,k)=>'<img src="'+esc(s)+'" class="'+(k===0?'on':'')+'" data-pdi="'+k+'" alt="" onerror="imgFalhou(this)">').join('')+'</div>':'';
 
   const tamsHtml=(p.tams&&p.tams.length)?'<label>Tamanho</label><div class="chips">'+p.tams.map(x=>'<button class="chip'+(x===prodAtual.tam?' on':'')+'" data-pdtam="'+esc(x)+'">'+esc(x)+'</button>').join('')+'</div>':'';
   const corsHtml=(p.cors&&p.cors.length)?'<label>Cor</label><div class="chips">'+p.cors.map(c=>'<button class="chip'+(c===prodAtual.cor?' on':'')+'" data-pdcor="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>':'';
@@ -921,7 +947,7 @@ function renderCart(){
   if(!cart.length){b.innerHTML='<div class="empty" style="padding:60px 20px"><span class="big-i">🛍️</span>Seu carrinho está vazio.<br><small>Adicione peças para começar.</small></div>';return}
   b.innerHTML='';
   cart.forEach((it,i)=>{
-    const t=it.img?'<img src="'+esc(it.img)+'" alt="">':(it.nome||'').trim().charAt(0).toUpperCase();
+    const t=it.img?'<img src="'+esc(it.img)+'" alt="" data-emoji="🌸" onerror="imgFalhou(this)">':(it.nome||'').trim().charAt(0).toUpperCase();
     const el=document.createElement('div');el.className='citem';
     el.innerHTML='<div class="cthumb">'+t+'</div><div class="cinfo"><b>'+esc(it.nome)+'</b><small>'+esc([it.tam,it.cor].filter(Boolean).join(' · '))+'</small><div class="qty"><button data-m>−</button><b>'+it.qtd+'</b><button data-p>+</button></div></div><div class="cretas"><b>'+R(it.qtd*it.preco)+'</b><button data-x title="Remover">🗑️</button></div>';
     el.querySelector('[data-m]').onclick=()=>{it.qtd--;if(it.qtd<=0)cart.splice(i,1);saveCart();renderCart()};
@@ -1090,57 +1116,92 @@ function limparProdutos(){if(!confirm('Apagar todos os produtos do site?'))retur
 /* ================= Gerenciar categorias ================= */
 function renderCatsGerenciar(){
   const box=$('#catsGerenciar');if(!box)return;box.innerHTML='';
-  const usado={};CFG.produtos.forEach(p=>{const c=(p.cat||'Outros').trim()||'Outros';usado[c]=(usado[c]||0)+1});
-  const lista=Object.keys(usado).sort();
+  const usado=contagemCats();
+  const lista=listaCats();
   if(!lista.length){box.innerHTML='<span style="color:var(--mut);font-size:13px">Nenhuma categoria ainda. Adicione abaixo.</span>';return}
-  lista.forEach(c=>{
-    const b=document.createElement('span');b.className='chip on';b.style.display='inline-flex';b.style.alignItems='center';b.style.gap='8px';
-    b.appendChild(document.createTextNode(c+' ('+usado[c]+')'));
+  const btnSt='border:0;background:rgba(255,255,255,.28);color:#fff;border-radius:6px;width:20px;height:20px;cursor:pointer;font-size:11px;line-height:1';
+  lista.forEach((c,idx)=>{
+    const b=document.createElement('span');b.className='chip on';b.style.display='inline-flex';b.style.alignItems='center';b.style.gap='6px';
+    b.appendChild(document.createTextNode(c+' ('+(usado[c]||0)+')'));
+    const up=document.createElement('button');up.type='button';up.textContent='▲';up.title='Mover para cima';
+    up.style.cssText=btnSt+(idx===0?';opacity:.35;cursor:default':'');
+    up.disabled=idx===0;up.onclick=()=>moverCategoria(c,-1);b.appendChild(up);
+    const dn=document.createElement('button');dn.type='button';dn.textContent='▼';dn.title='Mover para baixo';
+    dn.style.cssText=btnSt+(idx===lista.length-1?';opacity:.35;cursor:default':'');
+    dn.disabled=idx===lista.length-1;dn.onclick=()=>moverCategoria(c,1);b.appendChild(dn);
     const x=document.createElement('button');x.type='button';x.textContent='✕';x.title='Apagar categoria "'+c+'"';
-    x.style.cssText='border:0;background:rgba(255,255,255,.3);color:#fff;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:11px;line-height:1';
-    x.onclick=()=>removerCategoria(c);
-    b.appendChild(x);box.appendChild(b);
+    x.style.cssText=btnSt;x.onclick=()=>removerCategoria(c);b.appendChild(x);
+    box.appendChild(b);
   });
+  const hint=document.createElement('div');hint.style.cssText='width:100%;color:var(--mut);font-size:12px;margin-top:8px';
+  hint.textContent='Use ▲ ▼ para definir a ordem em que as categorias aparecem no site.';box.appendChild(hint);
+}
+/* Muda a posição da categoria na ordem (dir -1 sobe, +1 desce) */
+function moverCategoria(c,dir){
+  const lista=listaCats();
+  const i=lista.indexOf(c);const j=i+dir;
+  if(i<0||j<0||j>=lista.length)return;
+  [lista[i],lista[j]]=[lista[j],lista[i]];
+  CFG.categorias=lista.slice();
+  save();renderCatsGerenciar();renderCats();toast('Ordem atualizada');
 }
 function addCategoria(){
   const inp=$('#novaCat');const nome=(inp.value||'').trim();
   if(!nome)return toast('Digite o nome da categoria');
-  if(CFG.produtos.some(p=>((p.cat||'Outros').trim().toLowerCase()===nome.toLowerCase())))return toast('Essa categoria já existe');
-  CFG.produtos.push({cod:'',nome:'Produto de '+nome,cat:nome,tams:[],cors:[],preco:0.01,estoque:0,img:'',desc:''});
-  save();inp.value='';renderCatsGerenciar();renderCats();render();toast('Categoria "'+nome+'" adicionada ✅');
+  if(nome.toLowerCase()==='todos')return toast('"Todos" é reservado, escolha outro nome');
+  const todas=listaCats().map(c=>c.toLowerCase());
+  if(todas.includes(nome.toLowerCase()))return toast('Essa categoria já existe');
+  CFG.categorias=CFG.categorias||[];
+  CFG.categorias.push(nome);
+  save();inp.value='';renderCatsGerenciar();renderCats();render();renderCatsSugeridas();toast('Categoria "'+nome+'" adicionada ✅');
 }
 function removerCategoria(c){
   const n=CFG.produtos.filter(p=>(p.cat||'Outros').trim()===c).length;
-  if(!confirm('Apagar a categoria "'+c+'" e seus '+n+' produto(s)?'))return;
+  const msg=n?'Apagar a categoria "'+c+'" e seus '+n+' produto(s)?':'Apagar a categoria "'+c+'"? (não há produtos nela)';
+  if(!confirm(msg))return;
   CFG.produtos=CFG.produtos.filter(p=>(p.cat||'Outros').trim()!==c);
+  CFG.categorias=(CFG.categorias||[]).filter(x=>String(x).trim()!==c);
   if(cat===c)cat='Todos';
   save();renderCatsGerenciar();renderCats();render();toast('Categoria removida');
 }
 
 /* ================= Categorias sugeridas ================= */
 const CATS_SUGERIDAS=[
- ['👙','Sutiã','Sutiã renda','https://images.unsplash.com/photo-1594224457860-02d7dcc9b5ee?w=600&q=80'],
- ['🩲','Calcinha','Calcinha de renda','https://images.unsplash.com/photo-1583846717393-4c3f2c1f5a0e?w=600&q=80'],
- ['💝','Conjunto','Conjunto completo','https://images.unsplash.com/photo-1616150638538-ffb0679a3f5b?w=600&q=80'],
- ['👗','Body','Body de tule','https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80'],
- ['🛌','Camisola','Camisola cetim','https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&q=80'],
- ['🎀','Pijama','Pijama shorts','https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80'],
+ ['👙','Sutiã','Sutiã renda',''],
+ ['🩲','Calcinha','Calcinha de renda',''],
+ ['💝','Conjunto','Conjunto completo',''],
+ ['👗','Body','Body de tule',''],
+ ['🛌','Camisola','Camisola cetim',''],
+ ['🎀','Pijama','Pijama shorts',''],
  ['🧦','Meia-calça','',''],
  ['👙','Biquíni','','']
 ];
 function renderCatsSugeridas(){
   const box=$('#catsSugeridas');if(!box)return;box.innerHTML='';
+  const existentes=listaCats().map(c=>c.toLowerCase());
   CATS_SUGERIDAS.forEach(([ico,nome])=>{
-    const b=document.createElement('button');b.className='chip';b.textContent=ico+' '+nome;
-    b.onclick=()=>addModelo(ico,nome);box.appendChild(b);
+    const b=document.createElement('button');b.className='chip'+(existentes.includes(nome.toLowerCase())?' on':'');
+    b.textContent=ico+' '+nome;
+    b.title='Clique: cria a categoria "'+nome+'". Use Ctrl+clique para já adicionar 2 produtos de exemplo.';
+    b.onclick=(e)=>{if(e.ctrlKey||e.metaKey)addModelo(ico,nome);else addCatSugerida(ico,nome)};
+    box.appendChild(b);
   });
+}
+function addCatSugerida(ico,nome){
+  const existentes=listaCats().map(c=>c.toLowerCase());
+  if(!existentes.includes(nome.toLowerCase())){
+    CFG.categorias=CFG.categorias||[];CFG.categorias.push(nome);save();
+  }
+  renderCatsGerenciar();renderCats();render();renderCatsSugeridas();
+  if(typeof renderCatPick==='function')renderCatPick();
+  toast('Categoria "'+nome+'" pronta ✅');
 }
 function addModelo(ico,nome){
   const add=[
     {cod:'',nome:nome+' básico',cat:nome,tams:['P','M','G'],cors:['Preto','Nude'],preco:79.9,estoque:10,img:'',desc:''},
     {cod:'',nome:nome+' premium',cat:nome,tams:['P','M','G'],cors:['Vinho','Rosa'],preco:119.9,estoque:5,img:'',desc:''}
   ];
-  add.forEach(a=>CFG.produtos.push(a));save();renderCats();render();
+  add.forEach(a=>CFG.produtos.push(a));save();renderCats();render();if(typeof renderCatPick==='function')renderCatPick();
   toast('2 modelos de "'+nome+'" adicionados ✅');
 }
 
@@ -1163,7 +1224,8 @@ const TAGS_CAD=['Novo','Promoção','Lançamento','Mais vendido','Última peça'
 let cadEditIdx=null, cadFotos=[];
 let cadSel={cats:[],tams:[],cors:[],tags:[],destaque:false};
 
-function cadCategoriasDisponiveis(){return [...new Set([...CATS_CAD,...Object.keys(categorias())])]}
+function cadCategoriasDisponiveis(){return [...new Set([...CATS_CAD,...Object.keys(categorias())])].sort((a,b)=>a.localeCompare(b,'pt-BR'))}
+function renderCatPick(){montarTagpick('cadCats',cadCategoriasDisponiveis(),'cats')}
 function montarTagpick(boxId,lista,grupo){
   const box=$('#'+boxId);if(!box)return;box.innerHTML='';
   const todos=[...new Set([...lista,...cadSel[grupo]])];
@@ -1290,6 +1352,9 @@ function salvarProduto(){
   if(preco<=0)return toast('Digite um preço válido');
   const catNova=$('#cadCatNova').value.trim();
   const cat=(catNova||cadSel.cats[0]||'Outros');
+  if(cat&&cat.toLowerCase()!=='todos'&&!listaCats().some(c=>c.toLowerCase()===cat.toLowerCase())){
+    CFG.categorias=CFG.categorias||[];CFG.categorias.push(cat);
+  }
   const tagNova=$('#cadTagNova').value.trim();
   const tag=(tagNova||cadSel.tags[0]||'');
   const desc=$('#cadDesc').value.trim();
