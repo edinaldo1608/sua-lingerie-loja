@@ -1,0 +1,3 @@
+﻿IC occurrences: 53854
+HITS: 1579950  MISS: 0
+WROTE. before=129176 after=129219

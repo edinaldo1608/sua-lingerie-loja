@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════
+   SUA LINGERIE — COMO RECEBER OS PEDIDOS DO SITE
+═══════════════════════════════════════════════════════
+
+Você tem 2 arquivos:
+  • "Sua Lingerie - Site.html"         → a LOJA (para a cliente)
+  • "Sua Lingerie - Novo Layout.html"  → o PAINEL (para você)
+
+
+───────────────────────────────────────────────
+  PASSO 1 — Deixar os produtos iguais nos dois
+───────────────────────────────────────────────
+
+Se você mudou os produtos, precisa deixar o Site e o Painel
+com os MESMOS códigos (L001, L002...).
+
+Jeito mais fácil:
+  1. Abra o PAINEL (Novo Layout) e confira seus produtos na
+     aba "Estoque".
+  2. Abra o SITE e clique na engrenagem ⚙️ (canto superior).
+  3. Toque em "↻ Ler estoque do app (automático)".
+     → Pronto! O site pega os produtos certinhos do painel.
+
+(O site e o painel precisam estar no MESMO navegador/aparelho.)
+
+
+───────────────────────────────────────────────
+  PASSO 2 — A cliente faz o pedido
+───────────────────────────────────────────────
+
+A cliente abre o site, escolhe as peças, e clica
+em "Finalizar pelo WhatsApp 💬".
+
+Vai aparecer uma telinha pedindo:
+   • Nome
+   • Telefone
+   • Endereço
+
+Ela preenche e o pedido vai direto para o SEU WhatsApp.
+
+
+───────────────────────────────────────────────
+  PASSO 3 — Você registra a venda no painel
+───────────────────────────────────────────────
+
+Quando chegar a mensagem do pedido no seu WhatsApp:
+
+  1. Toque e SEGURE a mensagem do pedido.
+  2. Escolha "Copiar" (ou "Copiar texto").
+  3. Abra o PAINEL (Sua Lingerie - Novo Layout.html).
+  4. Toque no botão "📲 Importar pedido do site".
+  5. Cole a mensagem na caixa.
+  6. Toque em "Registrar venda ✓".
+
+O painel faz TUDO sozinho:
+  ✓ Cadastra a cliente (nome, telefone e endereço)
+  ✓ Registra a venda
+  ✓ Dá baixa no estoque
+  ✓ Abre o comprovante
+
+
+───────────────────────────────────────────────
+  ⚠️  DICA IMPORTANTE
+───────────────────────────────────────────────
+
+Se o painel avisar que um produto "não está cadastrado",
+é porque o código dele no site está diferente do painel.
+Faça o PASSO 1 de novo (Ler estoque do app) e tente outra vez.
+
+
+───────────────────────────────────────────────
+  🔒 BACKUP (não esqueça!)
+───────────────────────────────────────────────
+
+Seus dados ficam salvos SÓ no navegador deste aparelho.
+De vez em quando, na aba "Caixa", toque em
+"Gerar backup" e guarde o texto em lugar seguro.
+Assim você não perde nada se trocar de aparelho.

@@ -1,0 +1,42 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Comparar index.html",
+			"type": "shell",
+			"command": "powershell -Command \"$r = Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/edinaldo1608/sua-lingerie-loja/main/index.html' -UseBasicParsing; Write-Output ('GitHub bytes: ' + $r.RawContentLength); Write-Output ('Local bytes: ' + (Get-Item 'C:\\Users\\Edinaldo\\Downloads\\Sua Lingerie\\index.html').Length)\"",
+			"isBackground": false
+		},
+		{
+			"label": "git-push-site",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"c:\\Users\\Edinaldo\\Downloads\\Sua Lingerie",
+				"push",
+				"origin",
+				"main"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "publicar",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"c:\\Users\\Edinaldo\\Downloads\\Sua Lingerie",
+				"add",
+				"-A"
+			],
+			"group": "build"
+		},
+		{
+			"label": "Publicar site",
+			"type": "shell",
+			"command": "git add -A; git commit -m \"Troca botao para Comprar e clique na foto abre galeria\"; git push origin main",
+			"group": "build"
+		}
+	]
+}

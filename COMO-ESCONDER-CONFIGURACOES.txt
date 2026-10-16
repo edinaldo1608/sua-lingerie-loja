@@ -1,0 +1,110 @@
+════════════════════════════════════════════════════════════════════
+   SUA LINGERIE · SITE
+   Proteção das Configurações (SENHA / PIN) — APLICADO ✅
+════════════════════════════════════════════════════════════════════
+
+
+1) O QUE FOI FEITO
+──────────────────────────────────────────────────────────────────
+
+Os botões de administrador agora ficam ESCONDIDOS do cliente:
+
+   ✏️  Editar produtos   -> escondido (protegido por senha)
+   ⚙️  Configurações     -> escondido (protegido por senha)
+   🛍️  Carrinho          -> continua visível (uso normal do cliente)
+
+O cliente que abrir o site NÃO vê os botões ⚙️ e ✏️.
+Ele só vê: nome da loja, busca, categorias, produtos e carrinho.
+
+Aplicado nos DOIS arquivos:
+   • Sua Lingerie - Site (novo).html
+   • Sua Lingerie - Site (com fotos).html
+
+
+2) COMO VOCÊ (dono) ACESSA AS CONFIGURAÇÕES
+──────────────────────────────────────────────────────────────────
+
+   >>> MÉTODO 1 — CLIQUE SECRETO NO LOGO <<<
+
+   1. Abra o site.
+   2. Clique 5 VEZES SEGUIDAS E RÁPIDO no LOGO da loja (a imagem
+      redonda no canto superior esquerdo).
+   3. Vai aparecer uma caixinha pedindo o CÓDIGO DE ADMINISTRADOR.
+   4. Digite a senha:  1387
+   5. Pronto! Os botões ⚙️ e ✏️ aparecem no topo e você pode usá-los.
+
+   >>> MÉTODO 2 — BOTÃO COM SENHA <<<
+
+   Se os botões já estiverem visíveis e alguém clicar neles,
+   pede a senha. Só abre quem digitar 1387.
+
+   Observação: a cada vez que o site recarrega (F5), os botões
+   voltam a ficar escondidos — é normal, é a segurança.
+
+
+3) COMO TROCAR A SENHA (IMPORTANTE!)
+──────────────────────────────────────────────────────────────────
+
+   A senha atual é:  1387
+
+   Para trocar, abra o arquivo do site no Bloco de Notas e procure
+   por esta linha (use Ctrl+F e busque por "PIN_ADMIN"):
+
+      const PIN_ADMIN='1387';
+
+   Troque o 1387 pela senha que você quiser, entre as aspas:
+
+      const PIN_ADMIN='2608';
+
+   Salve o arquivo. Faça o mesmo no outro arquivo do site.
+   (Pode ser 4 dígitos, ou uma palavra, ex: 'minhaloja'.)
+
+   DICA: NÃO use uma senha óbvia como 1234 quando o site estiver
+   publicado de verdade. Troque por algo só seu.
+
+
+4) O QUE O CLIENTE VÊ E PODE USAR
+──────────────────────────────────────────────────────────────────
+
+   ✔  Nome da loja, logo, busca, categorias e produtos  -> PODE
+   ✔  Adicionar ao carrinho                             -> PODE
+   ✔  Finalizar / enviar pedido no WhatsApp             -> PODE
+   ✔  Botão do carrinho 🛍️                              -> PODE
+   ✖  Editar produtos (✏️)                              -> ESCONDIDO
+   ✖  Configurações (⚙️)                                -> ESCONDIDO
+
+
+5) ATENÇÃO / LIMITAÇÕES
+──────────────────────────────────────────────────────────────────
+
+   • Esta proteção é uma "tranca" para uso normal no dia a dia.
+     Ela evita que o cliente CLIQUE e mexa por acidente ou
+     curiosidade.
+
+   • Como o site é um arquivo HTML que roda no navegador, uma pessoa
+     MUITO técnica ainda conseguiria ver o código. Para uma loja
+     comum isso já é suficiente e é o padrão de sites assim.
+
+   • Se um dia quiser proteção "de verdade" (servidor, login real),
+     aí seria outro tipo de projeto — me avise que explico.
+
+
+6) PASSO A PASSO RÁPIDO (RESUMO)
+──────────────────────────────────────────────────────────────────
+
+   Para você mexer no site:
+       1. Abra o site
+       2. Clique 5x no logo
+       3. Digite 1387
+       4. Use ⚙️ / ✏️ normalmente
+
+   Para o cliente:
+       Nada a fazer — ele nunca vê os botões.
+
+   Para publicar:
+       Pode publicar tranquilo, os botões estão escondidos. ✔
+
+
+════════════════════════════════════════════════════════════════════
+   Dúvidas? É só chamar. 💕
+════════════════════════════════════════════════════════════════════

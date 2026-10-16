@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor de Imagens</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">🎨 Editor de Imagens</div>
+  <div class="actions">
+    <button id="btnAbrir" class="btn">📂 Abrir foto</button>
+    <input type="file" id="fileInput" accept="image/*" hidden>
+    <button id="btnSalvar" class="btn primary" disabled>💾 Salvar</button>
+    <select id="formato" class="select" disabled>
+      <option value="png">PNG</option>
+      <option value="jpeg">JPG</option>
+      <option value="webp">WEBP</option>
+    </select>
+  </div>
+</header>
+
+<main class="app">
+
+  <!-- Área de trabalho -->
+  <section class="stage" id="stage">
+    <div class="drop" id="drop">
+      <div class="drop-icon">🖼️</div>
+      <h2>Arraste uma foto aqui</h2>
+      <p>ou clique em <strong>Abrir foto</strong></p>
+      <p class="hint">Formatos: JPG, PNG, WEBP, GIF, BMP</p>
+    </div>
+
+    <div class="canvas-wrap" id="canvasWrap" hidden>
+      <div class="canvas-holder" id="canvasHolder">
+        <canvas id="canvas"></canvas>
+        <div class="crop-box" id="cropBox" hidden>
+          <span class="handle nw"></span>
+          <span class="handle ne"></span>
+          <span class="handle sw"></span>
+          <span class="handle se"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Painel de ferramentas -->
+  <aside class="panel" id="panel">
+
+    <div class="group">
+      <h3>Histórico</h3>
+      <div class="row">
+        <button id="btnUndo" class="btn small" disabled>↶ Desfazer</button>
+        <button id="btnRedo" class="btn small" disabled>↷ Refazer</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Transformar</h3>
+      <div class="row">
+        <button id="btnRotL" class="btn small" disabled>⟲ 90°</button>
+        <button id="btnRotR" class="btn small" disabled>⟳ 90°</button>
+        <button id="btnFlipH" class="btn small" disabled>↔ Espelhar</button>
+        <button id="btnFlipV" class="btn small" disabled>↕ Espelhar</button>
+      </div>
+      <div class="row">
+        <button id="btnCrop" class="btn small" disabled>✂️ Recortar</button>
+        <button id="btnCropCancel" class="btn small" hidden>Cancelar</button>
+        <button id="btnCropApply" class="btn small primary" hidden>Aplicar recorte</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h3>Ajustes</h3>
+      <label class="slider">
+        <span>Brilho <em id="vBrilho">0</em></span>
+        <input type="range" id="brilho" min="-100" max="100" value="0" disabled>
+      </label>
+      <label class="slider">
+        <span>Contraste <em id="vContraste">0</em></span>
+        <input type="range" id="contraste" min="-100" max="100" value="0" disabled>
+      </label>
+      <label class="slider">
+        <span>Saturação <em id="vSaturacao">0</em></span>
+        <input type="range" id="saturacao" min="-100" max="100" value="0" disabled>
+      </label>
+      <label class="slider">
+        <span>Desfoque <em id="vDesfoque">0</em></span>
+        <input type="range" id="desfoque" min="0" max="20" value="0" disabled>
+      </label>
+      <label class="slider">
+        <span>Sépia <em id="vSepia">0</em></span>
+        <input type="range" id="sepia" min="0" max="100" value="0" disabled>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="cinza" disabled> Preto e branco
+      </label>
+      <label class="check">
+        <input type="checkbox" id="inverter" disabled> Inverter cores
+      </label>
+    </div>
+
+    <div class="group">
+      <h3>Redimensionar</h3>
+      <div class="row">
+        <label class="mini">Largura
+          <input type="number" id="largura" min="1" disabled>
+        </label>
+        <label class="mini">Altura
+          <input type="number" id="altura" min="1" disabled>
+        </label>
+      </div>
+      <label class="check">
+        <input type="checkbox" id="proporcao" checked disabled> Manter proporção
+      </label>
+      <button id="btnResize" class="btn small" disabled>Aplicar tamanho</button>
+    </div>
+
+    <div class="group">
+      <button id="btnReset" class="btn small" disabled>↺ Restaurar original</button>
+    </div>
+
+  </aside>
+</main>
+
+<footer class="status">
+  <span id="status">Nenhuma imagem carregada</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

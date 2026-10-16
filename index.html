@@ -701,7 +701,7 @@ function render(){
       '<div class="pinfo">'+esc((p.tams||[]).join(' · ')||'')+(p.cors&&p.cors.length?' · '+esc(p.cors.join(', ')):'')+'</div>'+
       '<div class="pprice">'+R(p.preco)+'</div>'+
       restamHtml+
-      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛍️ '+esc(p._tag):'🛍️ Adicionar'))+'</button>'+
+      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛍️ '+esc(p._tag):'🛍️ Comprar'))+'</button>'+
       (sem?'':'<button class="btn wa full" style="margin-top:8px">Comprar pelo WhatsApp 💬</button>')+'</div></div>';
     el.querySelector('.pactions .pri').onclick=()=>abrirOpts(p);
     const waBtn=el.querySelector('.pactions .wa');if(waBtn)waBtn.onclick=()=>msgProduto(p);
@@ -715,7 +715,7 @@ function render(){
       if(pv)pv.onclick=(e)=>{e.stopPropagation();setFoto(fi-1)};
       if(nx)nx.onclick=(e)=>{e.stopPropagation();setFoto(fi+1)};
     }
-    if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();abrirProduto(p)};
+    if(mainImg)mainImg.onclick=(e)=>{e.stopPropagation();const f=fotosDe(p);abrirLightbox(f,+(mainImg.dataset.idx||0))};
     if(!editando){
       const pbody=el.querySelector('.pbody');
       if(pbody)pbody.addEventListener('click',e=>{if(e.target.closest('.pactions'))return;abrirProduto(p)});

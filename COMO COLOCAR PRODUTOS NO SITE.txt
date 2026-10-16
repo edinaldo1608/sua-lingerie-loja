@@ -1,0 +1,238 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║        COMO COLOCAR PRODUTOS NO SITE — SUA LINGERIE            ║
+║                    Guia passo a passo                          ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+Arquivo do site: "Sua Lingerie - Site (com fotos).html"
+(fica na pasta Downloads)
+
+
+──────────────────────────────────────────────────────────────────
+ ANTES DE COMEÇAR — COISAS IMPORTANTES
+──────────────────────────────────────────────────────────────────
+
+• Para abrir o site, dê DOIS CLIQUES no arquivo
+  "Sua Lingerie - Site (com fotos).html".
+  Ele abre no seu navegador (Chrome, Edge, etc.).
+
+• Os produtos e as configurações ficam SALVOS NO NAVEGADOR
+  do computador onde você cadastrou (não fica online).
+  Ou seja: se você cadastrar no seu computador, os produtos
+  aparecem naquele computador/navegador.
+
+• Sempre use o MESMO arquivo e o MESMO navegador para
+  que os produtos continuem lá.
+
+• Depois de cadastrar, clique em "Salvar" para não perder nada.
+
+
+──────────────────────────────────────────────────────────────────
+ PASSO 1 — ABRIR O PAINEL DE CONFIGURAÇÕES
+──────────────────────────────────────────────────────────────────
+
+1. Abra o site (clique duas vezes no arquivo HTML).
+
+2. No topo da página, clique no botão de ENGRENAGEM ( ⚙️ ).
+   Ele fica ao lado do ícone da sacola ( 🛍️ ).
+
+3. Vai abrir a janela "⚙️ Configurações da loja".
+
+
+──────────────────────────────────────────────────────────────────
+ PASSO 2 — CONFIGURAR OS DADOS DA LOJA (só precisa uma vez)
+──────────────────────────────────────────────────────────────────
+
+Dentro da janela de Configurações, preencha:
+
+  • Nome da loja
+      Ex.: Sua Lingerie
+
+  • WhatsApp da loja (com DDD e país, SÓ NÚMEROS)
+      Ex.: 5583988049010
+      (55 = Brasil / 83 = DDD / 988049010 = número)
+
+  • Mensagem de saudação (opcional)
+      Ex.: Olá! Quero fazer um pedido:
+
+  • Cor do site
+      Escolha entre: vinho, rosa, nude, roxo, verde ou preto.
+
+Ao terminar, clique em SALVAR.
+
+
+──────────────────────────────────────────────────────────────────
+ PASSO 3 — ADICIONAR SEUS PRODUTOS   ★ O MAIS IMPORTANTE ★
+──────────────────────────────────────────────────────────────────
+
+Você tem 3 formas de colocar produtos.
+Escolha a que for mais fácil para você.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FORMA A — DIGITAR A LISTA (a mais simples e rápida)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No campo "Opção 2 — cole uma lista de produtos em formato
+simples", coloque UM PRODUTO POR LINHA, assim:
+
+   Nome | Preço | Tamanho | Cor | Categoria | Foto(URL)
+
+⚠️  Separe cada informação com uma BARRA VERTICAL ( | ).
+⚠️  São 6 partes nessa ordem. Só o Nome e o Preço são obrigatórios;
+    as outras (tamanho, cor, categoria e foto) podem ficar em branco.
+    Se a categoria ficar em branco, vira "Outros".
+    Se a foto ficar em branco, o produto aparece SEM imagem.
+
+──────────────── EXEMPLO PRONTO (copie e adapte): ────────────────
+
+Sutiã renda | 89,90 | 42 | Preto | Sutiã | https://exemplo.com/sutia.jpg
+Calcinha fina | 34,90 | M | Vinho | Calcinha
+Conjunto completo | 129,90 | P | Branco | Conjunto
+Body de tule | 119,90 | M | Preto | Body
+
+───────────────────────────────────────────────────────────────
+
+DICAS:
+  • Use VÍRGULA no preço (89,90) ou ponto (89.90) — os dois funcionam.
+  • Um produto por linha. NÃO deixe linha em branco no meio.
+  • Acentuação pode ser usada normalmente (Sutiã, Biquíni...).
+  • Tamanho: se quiser mais de um tamanho no mesmo produto,
+    coloque separado por vírgula dentro da parte do tamanho.
+    Ex.:  P, M, G  →  cada tamanho vira uma opção de escolha.
+  • Sobre a FOTO (Foto/URL):
+      - Se você tiver um LINK da imagem (começa com http...),
+        cole ele na última parte. A foto aparece no site.
+      - Se NÃO tiver link, deixe a última parte vazia
+        (sem foto) por enquanto.
+
+Depois de digitar suas linhas:
+
+  1. Selecione e COPIE todo o texto.
+  2. Cole no campo (onde está escrito "Sutiã renda | 89,90 | ...").
+  3. Clique no botão "📝 Carregar produtos digitados".
+  4. Vai aparecer uma mensagem verde no canto:
+     "X produtos carregados ✅". Pronto, os produtos entram no site!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FORMA B — CARREGAR DO BACKUP DO APP "SUA LINGERIE"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Se você usa o aplicativo "Sua Lingerie" (o app de estoque):
+
+  1. Abra o APP no MESMO navegador.
+  2. No app, use a opção "Gerar backup".
+     Ele vai gerar um texto grande (começa com {"produtos":[...]).
+  3. Copie esse texto TODO.
+  4. Volte para a janela de Configurações do site.
+  5. Cole o texto no campo que diz:
+     "Cole aqui o texto {"produtos":[...],"movs":[...]}"
+     (campo "Opção 1").
+  6. Clique em "📥 Carregar produtos do backup".
+  7. Pronto! Seus produtos do app aparecem no site.
+
+>>> ATALHO AUTOMÁTICO:
+    Se o app e o site estiverem no MESMO navegador, é só clicar no
+    botão "↻ Ler estoque do app (automático)" e ele busca sozinho.
+    (Se não achar, use o passo do backup acima.)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FORMA C — PELO APP (mais automático)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+É a mesma coisa da "Forma B" com o botão automático:
+  1. Mantenha o app e o site abertos no mesmo navegador.
+  2. Clique em "↻ Ler estoque do app (automático)".
+  3. Confira se a mensagem "X produtos carregados do app ✅" apareceu.
+
+
+──────────────────────────────────────────────────────────────────
+ PASSO 4 — CONFERIR NO SITE
+──────────────────────────────────────────────────────────────────
+
+1. Feche a janela de Configurações (clique fora dela ou no X).
+2. Role a página até a seção "Produtos".
+3. Confira se seus produtos aparecem com nome, preço,
+   tamanho, cor e foto (quando você colocou foto).
+
+
+──────────────────────────────────────────────────────────────────
+ PASSO 5 — TESTAR UM PEDIDO (recomendado)
+──────────────────────────────────────────────────────────────────
+
+1. Clique em "🛍️ Adicionar" em um produto.
+2. Escolha o tamanho e a cor e clique em "Adicionar 🛍️".
+3. Abra o carrinho (ícone 🛍️ no topo) e clique em
+   "Finalizar pelo WhatsApp 💬".
+4. Preencha nome, telefone e endereço e clique em "Enviar pedido 💬".
+5. Deve abrir/combinar o pedido no WhatsApp da loja.
+
+
+──────────────────────────────────────────────────────────────────
+ OUTRAS AÇÕES ÚTEIS
+──────────────────────────────────────────────────────────────────
+
+ • LIMPAR TODOS OS PRODUTOS:
+     Na janela de Configurações, clique em "🗑️ Limpar".
+     (Pede confirmação antes de apagar.)
+
+ • SALVAR ALTERAÇÕES:
+     Sempre clique em "Salvar" depois de mudar qualquer coisa.
+
+ • TROCAR A FOTO DE UM PRODUTO:
+     Cadastre o produto de novo (Forma A) com o link da foto nova.
+
+ • MUDAR O NÚMERO DO WHATSAPP:
+     Configurações → campo "WhatsApp da loja" → digite só os
+     números com 55 + DDD → Salvar.
+
+
+──────────────────────────────────────────────────────────────────
+ PROBLEMAS COMUNS E SOLUÇÕES
+──────────────────────────────────────────────────────────────────
+
+❓ "Digitei os produtos mas não apareceram."
+   → Verifique se clicou em "Carregar produtos digitados".
+   → Veja se usou a barra vertical ( | ) para separar.
+   → Confira se cada produto tem pelo menos NOME e PREÇO.
+
+❓ "Apareceu: Nenhum produto válido."
+   → Algum produto está sem nome ou sem preço.
+   → Corrija a linha e carregue de novo.
+
+❓ "Meus produtos sumiram depois que fechei o navegador."
+   → Os dados ficam salvos no navegador. Se limpou o histórico/
+     cookies ou trocou de navegador/computador, pode ter perdido.
+     Cadastre novamente e sempre clique em "Salvar".
+   → Dica: guarde uma cópia do seu texto de produtos (Forma A)
+     num bloco de notas, para recolocar rapidinho quando precisar.
+
+❓ "A foto não apareceu."
+   → O link da imagem precisa ser um endereço DIRETO da imagem
+     (termina em .jpg, .png, .webp...) e começar com http ou https.
+     Links de página do Instagram, por exemplo, podem não funcionar
+     como foto de produto.
+
+❓ "Quero mandar o site para um cliente."
+   → Mande o ARQUIVO "Sua Lingerie - Site (com fotos).html"
+     junto com a pasta "Sua Lingerie Fotos" (se usar as fotos locais).
+     O cliente abre o arquivo no navegador dele.
+
+
+──────────────────────────────────────────────────────────────────
+ RESUMO RÁPIDO (cola)
+──────────────────────────────────────────────────────────────────
+
+  1. Abrir o arquivo do site (2 cliques)
+  2. Clicar na engrenagem ⚙️ (topo)
+  3. Preencher WhatsApp + Cor → Salvar
+  4. No campo da Opção 2, digitar:
+        Nome | Preço | Tamanho | Cor | Categoria | Foto
+        (um produto por linha)
+  5. Clicar em "📝 Carregar produtos digitados"
+  6. Fechar e conferir na seção "Produtos"
+  7. Testar um pedido pelo WhatsApp
+
+══════════════════════════════════════════════════════════════════
+                  Dúvidas? É só me chamar! 💕
+══════════════════════════════════════════════════════════════════

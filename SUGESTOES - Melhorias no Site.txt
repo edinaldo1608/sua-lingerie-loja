@@ -1,0 +1,104 @@
+════════════════════════════════════════════════════════════════════
+   SUA LINGERIE · SITE
+   SUGESTÕES DE MELHORIA (o que fazer a seguir)
+════════════════════════════════════════════════════════════════════
+
+O site já está MUITO bom e completo: carrinho, envio pelo WhatsApp,
+categorias, temas de cores, tudo funcionando. Abaixo vão sugestões
+organizadas por prioridade.
+
+
+■■■ 🔴 IMPORTANTES (fazer ANTES de publicar) ■■■
+──────────────────────────────────────────────────────────────────
+
+1) TODOS OS PRODUTOS ESTÃO "ESGOTADO"
+   Os 4 produtos aparecem como esgotado e o botão fica desabilitado.
+   Se publicar assim, NINGUÉM consegue comprar.
+   -> Confira no painel (⚙️) se o estoque está zerado por engano.
+
+2) CONFERIR O NÚMERO DO WHATSAPP
+   Hoje aparece: +5583988049010
+   -> Confirme se o número e o DDD estão corretos.
+
+3) TROCAR A SENHA
+   Hoje está 1387. Quando publicar de verdade, troque por algo
+   menos óbvio. (Veja o arquivo COMO-ESCONDER-CONFIGURACOES.txt)
+
+4) COLOCAR PREÇOS E DESCRIÇÕES REAIS
+   Os preços de hoje são exemplos (R$ 99,90 etc.).
+   -> Substitua pelos seus produtos de verdade.
+
+
+■■■ 🟡 MELHORIAS QUE VALORIZAM A LOJA ■■■
+──────────────────────────────────────────────────────────────────
+
+5) FOTOS REAIS DOS PRODUTOS
+   O arquivo "com fotos" já usa imagem; o "novo" usa emoji.
+   -> Use o "com fotos" como versão final: foto vende muito mais.
+
+6) BOTÃO "COMPRAR PELO WHATSAPP" EM CADA PRODUTO
+   Hoje o WhatsApp só aparece no carrinho. Muita gente não monta
+   carrinho e clica direto.
+   -> Botão direto em cada peça aumenta os pedidos.
+
+7) PÁGINA DE CADA PRODUTO (detalhes)
+   Hoje só existe o card. Uma página com foto grande, descrição
+   completa e tabela de medidas ajuda a vender.
+
+8) TABELA DE TAMANHOS DE VERDADE
+   Hoje diz só "P ao GG" (genérico).
+   -> Uma tabela com cm (busto, cintura, quadril) reduz trocas
+      e dúvidas no WhatsApp.
+
+
+■■■ 🟢 DIFERENCIAIS / MARKETING ■■■
+──────────────────────────────────────────────────────────────────
+
+9)  SELOS DE CONFIANÇA
+    "Compra segura", "Envio rastreado", "Troca fácil" já aparecem.
+    -> Vale destacar ainda mais no topo da página.
+
+10) INSTAGRAM INTEGRADO
+    O link já existe (@sualingerie.jp).
+    -> Criar uma seção "Siga @sualingerie.jp" com chamada bonita.
+
+11) CUPOM DE PRIMEIRA COMPRA
+    Ex.: "10% OFF no primeiro pedido". Um banner simples assim
+    costuma aumentar bastante a conversão.
+
+12) AVALIAÇÕES / DEPOIMENTOS
+    Mesmo 3 frases reais de clientes já dão credibilidade.
+
+13) PERGUNTAS FREQUENTES (FAQ)
+    "Como pago?", "Chega em quanto tempo?", "Posso trocar?".
+    Algumas já estão no rodapé — dá para ampliar.
+
+
+■■■ 🔵 TÉCNICO / PUBLICAÇÃO ■■■
+──────────────────────────────────────────────────────────────────
+
+14) OTIMIZAR AS IMAGENS
+    Se as fotos forem grandes, o site fica lento.
+    -> Comprimir as imagens deixa o site rápido.
+
+15) PUBLICAR NA INTERNET (hospedagem grátis)
+    Hoje o site é um arquivo local (só você vê).
+    -> Dá para subir em Netlify / Vercel / GitHub Pages de graça,
+       gerando um link tipo: sualingerie.netlify.app
+
+16) DOMÍNIO PRÓPRIO
+    Um endereço tipo sualingerie.com.br passa mais profissionalismo.
+
+17) BACKUP
+    Guarde sempre uma cópia do HTML na nuvem (Google Drive)
+    para não perder o trabalho.
+
+
+════════════════════════════════════════════════════════════════════
+   PRÓXIMOS PASSOS — escolha um:
+   A) Deixar o site "pronto pra vender" (estoque, fotos, botão
+      WhatsApp no produto)
+   B) Publicar online com link grátis
+   C) Adicionar depoimentos + FAQ + cupom (marketing)
+   D) Outra coisa específica
+════════════════════════════════════════════════════════════════════
