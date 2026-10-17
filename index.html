@@ -249,14 +249,15 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 .lightbox{cursor:zoom-out}
 .lightbox img{cursor:zoom-out}
 @keyframes lbZoom{from{transform:scale(.9);opacity:.6}to{transform:scale(1);opacity:1}}
-.lightbox .lb-close{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:14px;width:auto;height:44px;padding:0 16px;border-radius:22px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:15px;font-weight:700;line-height:1;cursor:pointer;display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px)}
-.lightbox .lb-close:hover{background:rgba(255,255,255,.3)}
+.lightbox .lb-close{display:none}
+.lightbox img{pointer-events:none}
+.lightbox:hover .lb-nav{opacity:1}
 .lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.16);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .lightbox .lb-nav:hover{background:rgba(255,255,255,.3)}
 .lightbox .lb-nav.prev{left:calc(10px + env(safe-area-inset-left,0px))}
 .lightbox .lb-nav.next{right:calc(10px + env(safe-area-inset-right,0px))}
 .lightbox .lb-count{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;letter-spacing:.5px}
-@media(max-width:520px){.lightbox .lb-nav{width:40px;height:40px;font-size:22px}.lightbox .lb-actions .btn{min-width:0;font-size:14px}.lightbox .lb-count{bottom:auto;top:calc(14px + env(safe-area-inset-top,0px));left:50%}}
+@media(max-width:520px){.lightbox .lb-nav{width:40px;height:40px;font-size:22px}.lightbox .lb-count{bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
 .qtyin{display:flex;align-items:center;gap:16px}
 .qtyin button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--tx);font-size:19px;cursor:pointer}
 .qtyin b{min-width:28px;text-align:center;font-size:18px}
@@ -451,12 +452,10 @@ textarea{font:12.5px/1.4 monospace;resize:vertical}
 <div class="modal" id="mProd"><div id="prodTop"></div></div>
 
 <div class="lightbox" id="lightbox" onclick="fecharLightbox(event)">
-  <button class="lb-close" title="Fechar" onclick="event.stopPropagation();fecharLightbox()">✕ Fechar</button>
   <button class="lb-nav prev" title="Foto anterior" onclick="navLightbox(-1,event)">‹</button>
   <img id="lbImg" src="" alt="Foto ampliada">
   <button class="lb-nav next" title="Próxima foto" onclick="navLightbox(1,event)">›</button>
   <div class="lb-count" id="lbCount"></div>
-  <div class="lb-actions" id="lbActions"></div>
 </div>
 
 <div class="modal" id="mCad">
@@ -701,7 +700,7 @@ function render(){
       '<div class="pinfo">'+esc((p.tams||[]).join(' · ')||'')+(p.cors&&p.cors.length?' · '+esc(p.cors.join(', ')):'')+'</div>'+
       '<div class="pprice">'+R(p.preco)+'</div>'+
       restamHtml+
-      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':(p._tag?'🛍️ '+esc(p._tag):'🛍️ Comprar'))+'</button>'+
+      '<div class="pactions"><button class="btn pri full" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':'🛍️ COMPRAR')+'</button>'+
       (sem?'':'<button class="btn wa full" style="margin-top:8px">Comprar pelo WhatsApp 💬</button>')+'</div></div>';
     el.querySelector('.pactions .pri').onclick=()=>abrirOpts(p);
     const waBtn=el.querySelector('.pactions .wa');if(waBtn)waBtn.onclick=()=>msgProduto(p);
@@ -762,7 +761,7 @@ function abrirOpts(p){
       '<div id="oRestam"></div>'+
       '<label>Quantidade</label><div class="qtyin"><button id="oM">−</button><b id="oQ">1</b><button id="oP">+</button></div>'+
     '</div>'+
-    '<div class="opt-foot"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">Adicionar 🛍️</button></div>'+
+    '<div class="opt-foot"><button class="btn" style="flex:1" onclick="fecharOpts()">Cancelar</button><button class="btn pri" style="flex:1" onclick="confOpts()">COMPRAR 🛍️</button></div>'+
     '</div>';
   const reTam=()=>{const box=to.querySelector('#oTamsChips');if(!box)return;box.innerHTML=p.tams.map(t=>optTamBtn(p,t,optAtual.tam,optAtual.cor)).join('');box.querySelectorAll('[data-tam]').forEach(b=>b.onclick=()=>{if(b.disabled)return;optAtual.tam=b.dataset.tam;box.querySelectorAll('[data-tam]').forEach(x=>x.classList.toggle('on',x===b));optRenderAviso();optRestam();abrirQuick()})};
   reTam();
@@ -808,7 +807,7 @@ function abrirQuick(){
       (esg?'<p class="mini" style="color:#c0392b;font-weight:700;margin:10px 0 0">Indisponível'+(cor?' na cor '+esc(cor):'')+'.</p>':'')+
       '<label>Quantidade</label><div class="qtyin"><button type="button" id="oqM">−</button><b id="oqQ">'+qtd+'</b><button type="button" id="oqP">+</button></div>'+
       restam+
-      '<div class="oq-foot"><button type="button" class="btn" id="oqCancel">Cancelar</button><button type="button" class="btn pri" id="oqAdd"'+(esg?' disabled':'')+'>'+(esg?'Esgotado':'Adicionar 🛍️')+'</button></div>'+
+      '<div class="oq-foot"><button type="button" class="btn" id="oqCancel">Cancelar</button><button type="button" class="btn pri" id="oqAdd"'+(esg?' disabled':'')+'>'+(esg?'Esgotado':'COMPRAR 🛍️')+'</button></div>'+
     '</div>';
     const qq=box.querySelector('#oqQ');
     const setQ=n=>{qtd=Math.max(1,Math.min(99,Math.max(1,estoqueDe(p,t,cor)),n));if(qq)qq.textContent=qtd};
@@ -832,11 +831,9 @@ function fecharOpts(){const q=document.getElementById('oqBox');if(q){q.classList
 
 /* ================= Lightbox (foto ampliada) ================= */
 let lbFotos=[],lbIdx=0,lbAcoes=null;
-function abrirLightbox(fotos,idx,acoes){
+function abrirLightbox(fotos,idx){
   fotos=(fotos||[]).filter(Boolean);if(!fotos.length)return;
-  lbFotos=fotos;lbIdx=Math.max(0,Math.min(idx||0,fotos.length-1));lbAcoes=acoes||null;atualizarLightbox();$('#lightbox').classList.add('on');
-  const box=$('#lbActions');
-  if(box){box.innerHTML=lbAcoes||'';/* o conteúdo vem com onclicks inline */}
+  lbFotos=fotos;lbIdx=Math.max(0,Math.min(idx||0,fotos.length-1));atualizarLightbox();$('#lightbox').classList.add('on');
 }
 function atualizarLightbox(){
   const im=$('#lbImg');if(!im||!lbFotos.length)return;
@@ -849,14 +846,9 @@ function atualizarLightbox(){
 }
 function navLightbox(dir,ev){if(ev)ev.stopPropagation();if(lbFotos.length<2)return;lbIdx=(lbIdx+dir+lbFotos.length)%lbFotos.length;atualizarLightbox()}
 function fecharLightbox(ev){
-  if(ev&&ev.target){
-    /* clicar na imagem, no contador ou em elementos internos (ações/nav) não fecha */
-    if(ev.target===document.querySelector('#lbImg'))return;
-    if(ev.target.closest&&ev.target.closest('.lb-actions,.lb-nav,.lb-count,.lb-close'))return;
-  }
+  if(ev&&ev.target&&ev.target.closest&&ev.target.closest('.lb-nav,.lb-count'))return;
   $('#lightbox').classList.remove('on');
   const im=$('#lbImg');if(im)im.src='';
-  const box=$('#lbActions');if(box)box.innerHTML='';
 }
 document.addEventListener('keydown',e=>{
   const lb=$('#lightbox');if(!lb||!lb.classList.contains('on'))return;
@@ -904,7 +896,7 @@ function abrirProduto(p){
           '<label>Quantidade</label><div class="qtyin"><button id="pdM">−</button><b id="pdQ">1</b><button id="pdP">+</button></div>'+
         '</div>'+
         '<div class="pd-actions">'+
-          '<button class="btn pri full" id="pdAdd" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':'🛍️ Adicionar ao carrinho')+'</button>'+
+          '<button class="btn pri full" id="pdAdd" '+(sem?'disabled':'')+'>'+(sem?'Esgotado':'🛍️ COMPRAR')+'</button>'+
           (sem?'':'<button class="btn wa full" id="pdWa">Comprar pelo WhatsApp 💬</button>')+
         '</div>'+
       '</div>'+
@@ -918,10 +910,7 @@ function abrirProduto(p){
   if(pv)pv.onclick=(e)=>{e.stopPropagation();setPdFoto(prodAtual.foto-1)};
   if(nx)nx.onclick=(e)=>{e.stopPropagation();setPdFoto(prodAtual.foto+1)};
   thumbs.forEach(im=>im.onclick=()=>setPdFoto(+im.dataset.pdi));
-  if(pdImg)pdImg.onclick=()=>abrirLightbox(fotos,prodAtual.foto,
-    (sem?'':'<button class="btn pri" onclick="event.stopPropagation();addCart(prodAtual.p,prodAtual.tam,prodAtual.cor,prodAtual.qtd);fecharLightbox();fecharProduto();toast(\'Adicionado ao carrinho 🛍️\')">🛍️ Adicionar ao carrinho</button>')+
-    (sem?'':'<button class="btn wa" onclick="event.stopPropagation();msgProduto(prodAtual.p)">Comprar pelo WhatsApp 💬</button>')+
-    '<button class="btn" onclick="event.stopPropagation();fecharLightbox()">Voltar</button>');
+  if(pdImg)pdImg.onclick=()=>abrirLightbox(fotos,prodAtual.foto);
 
   /* opções */
   if(p.tams&&p.tams.length){
@@ -935,7 +924,7 @@ function abrirProduto(p){
     box.querySelectorAll('[data-pdtam]').forEach(b=>b.onclick=()=>{if(b.disabled)return;prodAtual.tam=b.dataset.pdtam;box.querySelectorAll('[data-pdtam]').forEach(x=>x.classList.toggle('on',x===b));pdSyncQtd()});
   };
   const pdAviso=()=>{const box=t.querySelector('#pdAviso');if(!box)return;box.innerHTML=tamEsgotado(p,prodAtual.tam,prodAtual.cor)?'<p class="mini" style="color:#c0392b;font-weight:700;margin:8px 0 0">Tamanho '+esc(prodAtual.tam)+' esgotado'+(prodAtual.cor?' na cor '+esc(prodAtual.cor):'')+'. Escolha '+(p.cors&&p.cors.length?'outra cor ou ':'')+'outro tamanho.</p>':''};
-  const pdAddBtn=()=>{const b=t.querySelector('#pdAdd');if(!b)return;const e=tamEsgotado(p,prodAtual.tam,prodAtual.cor);b.disabled=e;b.textContent=e?('Esgotado'+(prodAtual.tam?' ('+prodAtual.tam+')':'')):'🛍️ Adicionar ao carrinho'};
+  const pdAddBtn=()=>{const b=t.querySelector('#pdAdd');if(!b)return;const e=tamEsgotado(p,prodAtual.tam,prodAtual.cor);b.disabled=e;b.textContent=e?('Esgotado'+(prodAtual.tam?' ('+prodAtual.tam+')':'')):'🛍️ COMPRAR'};
   const qm=t.querySelector('#pdM'),qp=t.querySelector('#pdP'),qq=t.querySelector('#pdQ');
   const pdMax=()=>Math.max(1,estoqueDe(p,prodAtual.tam,prodAtual.cor));
   const pdSyncQtd=()=>{const max=pdMax();if(prodAtual.qtd>max)prodAtual.qtd=max;if(prodAtual.qtd<1)prodAtual.qtd=1;if(qq)qq.textContent=prodAtual.qtd;pdAviso();pdAddBtn();pdRestam()};
